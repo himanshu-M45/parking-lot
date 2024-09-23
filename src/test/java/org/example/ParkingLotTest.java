@@ -82,7 +82,9 @@ class ParkingLotTest {
         // un-park secondCar
         parkingLot.unPark(secondCar);
 
-        assertEquals(1, parkingLot.getNearestSlot());
+        int expectedSlot = 1;
+
+        assertEquals(expectedSlot, parkingLot.getNearestSlot());
     }
 
     // test to get count of all cars of given color
@@ -99,7 +101,9 @@ class ParkingLotTest {
         parkingLot.park(thirdCar);
         parkingLot.park(fourthCar);
 
-        assertEquals(2, parkingLot.getCountOfCarsByColor(CarColor.BLUE));
+        int expectedCount = 2;
+
+        assertEquals(expectedCount, parkingLot.getCountOfCarsByColor(CarColor.BLUE));
     }
 
     @Test
@@ -115,7 +119,9 @@ class ParkingLotTest {
         parkingLot.park(thirdCar);
         parkingLot.park(fourthCar);
 
-        assertEquals(3, parkingLot.getCountOfCarsByColor(CarColor.BLACK));
+        int expectedCount = 3;
+
+        assertEquals(expectedCount, parkingLot.getCountOfCarsByColor(CarColor.BLACK));
     }
 
     // test to check availability of car in parking lot
@@ -156,7 +162,8 @@ class ParkingLotTest {
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
 
-        assertEquals(secondCar, parkingLot.unPark(secondCar));
+        Car unparkedCar = parkingLot.unPark(secondCar);
+        assertEquals(secondCar, unparkedCar);
     }
 
     @Test
@@ -170,6 +177,25 @@ class ParkingLotTest {
         assertThrows(NullPointerException.class, () -> {
             parkingLot.unPark(secondCar);
         });
+    }
+
+    @Test
+    void testSlotIsEmptyOrNotAfterUnParkingTheCar() {
+        ParkingLot parkingLot = new ParkingLot(7);
+
+        Car firstCar = new Car(123, CarColor.RED);
+        Car secondCar = new Car(234, CarColor.BLUE);
+        Car thirdCar = new Car(345, CarColor.GREEN);
+        parkingLot.park(firstCar); // slot -> 0
+        parkingLot.park(secondCar); // slot -> 1
+        parkingLot.park(thirdCar); // slot -> 2
+
+        Car unparkedCar = parkingLot.unPark(secondCar);
+        assertEquals(secondCar, unparkedCar);
+
+        int slotNumber = 1;
+
+        assertTrue(parkingLot.checkParkingSlot(slotNumber));
     }
 
 }

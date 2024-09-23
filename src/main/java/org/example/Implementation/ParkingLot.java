@@ -9,15 +9,15 @@ import java.util.Objects;
 
 public class ParkingLot {
     public boolean isFull = false;
-    private final ArrayList<Car> slotArray;
+    private final ArrayList<Car> slot;
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
             throw new InvalidValueException("Number of slots should be greater than 0");
         }
-        this.slotArray = new ArrayList<>(numberOfSlots);
+        this.slot = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
-            slotArray.add(null); // Initialize all slots as empty
+            slot.add(null); // Initialize all slots as empty
         }
     }
 
@@ -26,15 +26,15 @@ public class ParkingLot {
             throw new ParkingLotIsFullException("Parking lot is full");
         }
         int slotToPark = getNearestSlot();
-        slotArray.set(slotToPark, car);
-        if (slotArray.stream().allMatch(Objects::nonNull)) {
+        slot.set(slotToPark, car);
+        if (slot.stream().allMatch(Objects::nonNull)) {
             this.isFull = true;
         }
     }
 
     public int getNearestSlot() {
-        for (int i = 0; i < slotArray.size(); i++) {
-            if (slotArray.get(i) == null) {
+        for (int i = 0; i < slot.size(); i++) {
+            if (slot.get(i) == null) {
                 return i;
             }
         }
@@ -43,7 +43,7 @@ public class ParkingLot {
 
     public int getCountOfCarsByColor(CarColor carColor) {
         int count = 0;
-        for (Car car : slotArray) {
+        for (Car car : slot) {
             if (car != null && car.color == carColor) {
                 count++;
             }
@@ -52,7 +52,7 @@ public class ParkingLot {
     }
 
     public boolean checkParkedCar(int registrationNumber) {
-        for (Car car : slotArray) {
+        for (Car car : slot) {
             if (car.registrationNumber == registrationNumber) {
                 return true;
             }
@@ -62,10 +62,17 @@ public class ParkingLot {
 
     public Car unPark(Car car) {
         if (checkParkedCar(car.registrationNumber)) {
-            slotArray.set(slotArray.indexOf(car), null);
+            slot.set(slot.indexOf(car), null);
             this.isFull = false;
             return car;
         }
         throw new NullPointerException("Car not found in parking lot");
+    }
+
+    public boolean checkParkingSlot(int slotNumber) {
+        if (slot.get(slotNumber) == null) {
+            return true;
+        }
+        throw new NullPointerException("Slot is not empty");
     }
 }
