@@ -1,4 +1,8 @@
-package org.example;
+package org.example.Implementation;
+
+import org.example.Enum.CarColor;
+import org.example.Exceptions.InvalidValueException;
+import org.example.Exceptions.ParkingLotIsFullException;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -9,7 +13,7 @@ public class ParkingLot {
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
-            throw new IllegalArgumentException("Number of slots should be greater than 0");
+            throw new InvalidValueException("Number of slots should be greater than 0");
         }
         this.slotArray = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
@@ -19,7 +23,7 @@ public class ParkingLot {
 
     public void park(Car car) {
         if (this.isFull) {
-            throw new IllegalArgumentException("Parking lot is full");
+            throw new ParkingLotIsFullException("Parking lot is full");
         }
         int slotToPark = getNearestSlot();
         slotArray.set(slotToPark, car);
@@ -34,16 +38,7 @@ public class ParkingLot {
                 return i;
             }
         }
-        throw new IllegalArgumentException("No empty slot found");
-    }
-
-    public boolean checkParkedCar(int registrationNumber) {
-        for (Car car : slotArray) {
-            if (car.registrationNumber == registrationNumber) {
-                return true;
-            }
-        }
-        throw new IllegalArgumentException("Car not found in parking lot");
+        throw new ParkingLotIsFullException("No empty slot found");
     }
 
     public int getCountOfCarsByColor(CarColor carColor) {
@@ -56,12 +51,21 @@ public class ParkingLot {
         return count;
     }
 
-    public boolean unParkCar(Car car) {
+    public boolean checkParkedCar(int registrationNumber) {
+        for (Car car : slotArray) {
+            if (car.registrationNumber == registrationNumber) {
+                return true;
+            }
+        }
+        throw new NullPointerException("Car not found in parking lot");
+    }
+
+    public Car unPark(Car car) {
         if (checkParkedCar(car.registrationNumber)) {
             slotArray.set(slotArray.indexOf(car), null);
             this.isFull = false;
-            return true;
+            return car;
         }
-        throw new IllegalArgumentException("Car not found in parking lot");
+        throw new NullPointerException("Car not found in parking lot");
     }
 }

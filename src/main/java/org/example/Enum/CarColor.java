@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Enum;
 
 public enum CarColor {
     RED,
