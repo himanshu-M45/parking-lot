@@ -1,7 +1,6 @@
-package org.example;
+package org.example.Implementation;
 
 import org.example.Enum.CarColor;
-import org.example.Implementation.Car;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

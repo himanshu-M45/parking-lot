@@ -10,15 +10,13 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ParkingLot {
-    public Integer parkingLotID;
     public boolean isFull = false;
     private final ArrayList<Car> slot;
 
-    public ParkingLot(int numberOfSlots, int parkingLotID) {
-        if (numberOfSlots <= 0 || parkingLotID <= 0) {
+    public ParkingLot(int numberOfSlots) {
+        if (numberOfSlots <= 0) {
             throw new InvalidValueException("Number of slots should be greater than 0");
         }
-        this.parkingLotID = parkingLotID;
         this.slot = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
             slot.add(null); // Initialize all slots as empty
@@ -34,10 +32,11 @@ public class ParkingLot {
         }
         int slotToPark = getNearestSlot(); // get the nearest slot to park the car
         slot.set(slotToPark, car); // park the car
+        car.isCarParked = true;
         if (slot.stream().allMatch(Objects::nonNull)) {
             this.isFull = true;
         }
-        return new Ticket(car, slotToPark, parkingLotID);
+        return new Ticket(car, slotToPark, System.identityHashCode(this));
     }
 
     private int getNearestSlot() {
@@ -62,14 +61,14 @@ public class ParkingLot {
     public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
         for (Car car : slot) {
             if (car.registrationNumber == registrationNumber) {
-                return new Ticket(car, getCarParkingSlotNumber(car), parkingLotID);
+                return new Ticket(car, getCarParkingSlotNumber(car), System.identityHashCode(this));
             }
         }
         throw new NullPointerException("Car not found in parking lot");
     }
 
     public Car unPark(Ticket carTicket) {
-        if (slot.get(carTicket.slotNumber) != null && this.parkingLotID == carTicket.parkingLotID) {
+        if (slot.get(carTicket.slotNumber) != null && System.identityHashCode(this) == carTicket.parkingLotObjId) {
             Car car = slot.get(carTicket.slotNumber);
             slot.set(carTicket.slotNumber, null);
             this.isFull = false;
