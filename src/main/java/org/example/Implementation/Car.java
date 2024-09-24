@@ -15,10 +15,6 @@ public class Car {
         this.color = color;
     }
 
-    public int getRegistrationNumber() {
-        return 0;
-    }
-
     public CarColor getColor() {
         return null;
     }

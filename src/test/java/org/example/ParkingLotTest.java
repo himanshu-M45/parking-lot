@@ -5,6 +5,7 @@ import org.example.Exceptions.InvalidValueException;
 import org.example.Exceptions.ParkingLotIsFullException;
 import org.example.Implementation.Car;
 import org.example.Implementation.ParkingLot;
+import org.example.Implementation.Ticket;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -81,15 +82,19 @@ class ParkingLotTest {
         Car firstCar = new Car(123, CarColor.RED);
         Car secondCar = new Car(234, CarColor.BLUE);
         Car thirdCar = new Car(345, CarColor.GREEN);
-        parkingLot.park(firstCar); // slot -> 0
-        parkingLot.park(secondCar); // slot -> 1
-        parkingLot.park(thirdCar); // slot -> 2
+        Car fourthCar = new Car(456, CarColor.BLACK);
 
-        parkingLot.unPark(secondCar); // un-park secondCar
+        Ticket fistCarTicket = parkingLot.park(firstCar); // slot -> 0
+        Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
+        Ticket thirdCarTicket = parkingLot.park(thirdCar); // slot -> 2
+
+        parkingLot.unPark(secondCarTicket); // un-park firstCar
+
+        parkingLot.park(fourthCar); // slot -> 0
 
         int expectedSlot = 1;
 
-        assertTrue(parkingLot.checkParkingSlot(expectedSlot));
+        assertEquals(expectedSlot, parkingLot.getCarParkingSlotNumber(fourthCar));
     }
 
     // ------------------------------- count cars by color tests -------------------------------
@@ -141,19 +146,19 @@ class ParkingLotTest {
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
 
-        assertTrue(parkingLot.isParkedCarByRegistrationNumber(thirdCar.registrationNumber));
+        Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(thirdCar.registrationNumber);
+
+        assertEquals(thirdCar, expectedTicket.car);
     }
 
     @Test
     void testCheckTheGivenCarIsNotAvailableInParkingLot() {
         ParkingLot parkingLot = new ParkingLot(7);
 
-        Car firstCar = new Car(123, CarColor.RED);
-        Car secondCar = new Car(234, CarColor.BLUE);
-        parkingLot.park(firstCar);
+        Car car = new Car(123, CarColor.RED);
 
         assertThrows(NullPointerException.class, () -> {
-            parkingLot.isParkedCarByRegistrationNumber(secondCar.registrationNumber);
+            parkingLot.getCarParkedInfoByRegNo(car.registrationNumber);
         });
     }
 
@@ -162,45 +167,26 @@ class ParkingLotTest {
     void testUnParkCarFromParkingLotWhereIsAvailable() {
         ParkingLot parkingLot = new ParkingLot(7);
 
-        Car firstCar = new Car(123, CarColor.RED);
-        Car secondCar = new Car(234, CarColor.BLUE);
-        parkingLot.park(firstCar);
-        parkingLot.park(secondCar);
+        Car car = new Car(123, CarColor.RED);
+        parkingLot.park(car);
 
-        Car unparkedCar = parkingLot.unPark(secondCar);
-        assertEquals(secondCar, unparkedCar);
+        Ticket firstCarTicket = parkingLot.park(car);
+
+        Car unparkedCar = parkingLot.unPark(firstCarTicket);
+        assertEquals(car, unparkedCar);
     }
 
     @Test
-    void testUnParkCarFromParkingLotWhereIsNotAvailable() {
+    void testUnParkCarFromParkingLotWhereCarIsNotAvailable() {
         ParkingLot parkingLot = new ParkingLot(7);
 
-        Car firstCar = new Car(123, CarColor.RED);
-        Car secondCar = new Car(234, CarColor.BLUE);
-        parkingLot.park(firstCar);
+        Car car = new Car(999, CarColor.YELLOW);
+
+        Ticket dummyTicket = new Ticket(car, 5);
 
         assertThrows(NullPointerException.class, () -> {
-            parkingLot.unPark(secondCar);
+            parkingLot.unPark(dummyTicket);
         });
-    }
-
-    @Test
-    void testSlotIsEmptyOrNotAfterUnParkingTheCar() {
-        ParkingLot parkingLot = new ParkingLot(7);
-
-        Car firstCar = new Car(123, CarColor.RED);
-        Car secondCar = new Car(234, CarColor.BLUE);
-        Car thirdCar = new Car(345, CarColor.GREEN);
-        parkingLot.park(firstCar); // slot -> 0
-        parkingLot.park(secondCar); // slot -> 1
-        parkingLot.park(thirdCar); // slot -> 2
-
-        Car unparkedCar = parkingLot.unPark(secondCar);
-        assertEquals(secondCar, unparkedCar);
-
-        int slotNumber = 1;
-
-        assertTrue(parkingLot.checkParkingSlot(slotNumber));
     }
 
     // ------------------------------- spy tests -------------------------------
@@ -212,7 +198,7 @@ class ParkingLotTest {
         Car secondCar = new Car(234, CarColor.BLUE);
 
         // Mock the park method
-        doNothing().when(parkingLot).park(any(Car.class));
+        when(parkingLot.park(any(Car.class))).thenReturn(new Ticket(new Car(8, CarColor.RED), 0));
 
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
@@ -236,17 +222,14 @@ class ParkingLotTest {
     void testMockCarAndParkIt() {
         Car mockCar = mock(Car.class);
 
-        when(mockCar.getRegistrationNumber()).thenReturn(123);
         when(mockCar.getColor()).thenReturn(CarColor.RED);
 
         ParkingLot parkingLot = new ParkingLot(2);
 
         parkingLot.park(mockCar);
 
-        assertFalse(parkingLot.checkParkingSlot(0));
         assertEquals(CarColor.RED, mockCar.getColor());
 
-        verify(mockCar, times(1)).getRegistrationNumber();
         verify(mockCar, times(1)).getColor();
     }
 
@@ -263,11 +246,11 @@ class ParkingLotTest {
         Method getNearestSlotMethod = ParkingLot.class.getDeclaredMethod("getNearestSlot");
         getNearestSlotMethod.setAccessible(true);
 
-        parkingLot.park(firstCar);
-        parkingLot.park(secondCar);
-        parkingLot.park(thirdCar);
+        Ticket fistCarTicket = parkingLot.park(firstCar); // slot -> 0
+        Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
+        Ticket thirdCarTicket = parkingLot.park(thirdCar); // slot -> 2
 
-        parkingLot.unPark(secondCar);
+        parkingLot.unPark(secondCarTicket);
 
         int expectedSlot = 1;
         assertEquals(expectedSlot, getNearestSlotMethod.invoke(parkingLot));

@@ -21,7 +21,7 @@ public class ParkingLot {
         }
     }
 
-    public void park(Car car) {
+    public Ticket park(Car car) {
         if (this.isFull) {
             throw new ParkingLotIsFullException("Parking lot is full");
         }
@@ -30,6 +30,7 @@ public class ParkingLot {
         if (slot.stream().allMatch(Objects::nonNull)) {
             this.isFull = true;
         }
+        return new Ticket(car, slotToPark);
     }
 
     private int getNearestSlot() {
@@ -51,25 +52,31 @@ public class ParkingLot {
         return count;
     }
 
-    public boolean isParkedCarByRegistrationNumber(int registrationNumber) {
+    public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
         for (Car car : slot) {
             if (car.registrationNumber == registrationNumber) {
-                return true;
+                return new Ticket(car, getCarParkingSlotNumber(car));
             }
         }
         throw new NullPointerException("Car not found in parking lot");
     }
 
-    public Car unPark(Car car) {
-        if (isParkedCarByRegistrationNumber(car.registrationNumber)) {
-            slot.set(slot.indexOf(car), null);
+    public Car unPark(Ticket carTicket) {
+        if (slot.get(carTicket.slotNumber) != null) {
+            Car car = slot.get(carTicket.slotNumber);
+            slot.set(carTicket.slotNumber, null);
             this.isFull = false;
             return car;
         }
         throw new NullPointerException("Car not found in parking lot");
     }
 
-    public boolean checkParkingSlot(int slotNumber) {
-        return slot.get(slotNumber) == null;
+    public int getCarParkingSlotNumber(Car car) {
+        for (int i = 0; i < slot.size(); i++) {
+            if (slot.get(i) != null && slot.get(i).registrationNumber == car.registrationNumber) {
+                return i;
+            }
+        }
+        throw new NullPointerException("Car not found in parking lot");
     }
 }
