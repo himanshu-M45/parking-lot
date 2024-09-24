@@ -27,4 +27,22 @@ public class Attendant {
     public Ticket park(ParkingLot parkingLot, Car car) {
         return parkingLot.park(car);
     }
+
+    public Car unPark(Ticket carTicket) {
+        ParkingLot parkingLot = findParkingLotByObjectId(carTicket.parkingLotObjId);
+        if (parkingLot != null) {
+            return parkingLot.unPark(carTicket);
+        }
+        throw new ParkingLotNotFoundException("Parking lot not found");
+    }
+
+    private ParkingLot findParkingLotByObjectId(int parkingLotObjId) {
+        // find the parking lot by the object id
+        for (ParkingLot parkingLot: assignedParkingLots) {
+            if (System.identityHashCode(parkingLot) == parkingLotObjId) {
+                return parkingLot;
+            }
+        }
+        return null;
+    }
 }

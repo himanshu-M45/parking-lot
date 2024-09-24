@@ -2,6 +2,7 @@ package org.example.Implementation;
 
 import org.example.Enum.CarColor;
 import org.example.Exceptions.CarAlreadyParkedException;
+import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
 import org.example.Exceptions.ParkingLotIsFullException;
 import org.junit.jupiter.api.Test;
@@ -112,7 +113,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkCarInMultipleParkingLots() {
+    void testParkCarInMultipleParkingLotsThroughSameAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -126,7 +127,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkSameCarInDifferentParkingLots() {
+    void testParkSameCarInDifferentParkingLotsOfSameAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -139,4 +140,98 @@ class AttendantTest {
         assertThrows(CarAlreadyParkedException.class, () -> {attendant.park(secondParkingLot, car);});
     }
 
+    @Test
+    void testParkCarInDifferentParkingLotThroughDifferentAttendants() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        Attendant firstAttendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        Attendant secondAttendant = new Attendant();
+        Car secondCar = new Car(2, CarColor.RED);
+
+        firstAttendant.assign(firstParkingLot);
+        secondAttendant.assign(secondParkingLot);
+
+        assertEquals(firstCar, firstAttendant.park(firstParkingLot, firstCar).car);
+        assertEquals(secondCar, secondAttendant.park(secondParkingLot, secondCar).car);
+    }
+
+    // ------------------------------- un-park through attendant tests -------------------------------
+    @Test
+    void testUnParkCarThroughAttendant() {
+        ParkingLot parkingLot = new ParkingLot(1);
+        Attendant attendant = new Attendant();
+        attendant.assign(parkingLot);
+        Car car = new Car(1, CarColor.BLACK);
+
+        Ticket carTicket = attendant.park(parkingLot, car);
+
+        assertEquals(car, attendant.unPark(carTicket));
+    }
+
+    @Test
+    void testUnParkCarFromMultipleParkingLots() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        Attendant attendant = new Attendant();
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+
+        Ticket firstCarTicket = attendant.park(firstParkingLot, firstCar);
+        Ticket secondCarTicket = attendant.park(secondParkingLot, secondCar);
+
+        assertEquals(firstCar, attendant.unPark(firstCarTicket));
+        assertEquals(secondCar, attendant.unPark(secondCarTicket));
+    }
+
+    @Test
+    void testUnParkAlreadyUnParkedCar() {
+        ParkingLot parkingLot = new ParkingLot(1);
+        Attendant attendant = new Attendant();
+        attendant.assign(parkingLot);
+        Car car = new Car(1, CarColor.BLACK);
+
+        Ticket carTicket = attendant.park(parkingLot, car);
+        attendant.unPark(carTicket);
+
+        assertThrows(InvalidTicketException.class, () -> {attendant.unPark(carTicket);});
+    }
+
+    @Test
+    void testUnParkMultipleCarsFromMultipleParkingLotsOfSameAttendant() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        Attendant attendant = new Attendant();
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+
+        Ticket firstCarTicket = attendant.park(firstParkingLot, firstCar);
+        Ticket secondCarTicket = attendant.park(secondParkingLot, secondCar);
+
+        assertEquals(firstCar, attendant.unPark(firstCarTicket));
+        assertEquals(secondCar, attendant.unPark(secondCarTicket));
+    }
+
+    @Test
+    void testUnParkMultipleCarsFromMultipleParkingLotsOfDifferentAttendant() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        Attendant firstAttendant = new Attendant();
+        firstAttendant.assign(firstParkingLot);
+        Attendant secondAttendant = new Attendant();
+        secondAttendant.assign(secondParkingLot);
+
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+
+        Ticket firstCarTicket = firstAttendant.park(firstParkingLot, firstCar);
+        Ticket secondCarTicket = firstAttendant.park(secondParkingLot, secondCar);
+
+        assertEquals(firstCar, firstAttendant.unPark(firstCarTicket));
+        assertEquals(secondCar, secondAttendant.unPark(secondCarTicket));
+    }
 }
