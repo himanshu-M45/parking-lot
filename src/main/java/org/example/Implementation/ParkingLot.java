@@ -32,7 +32,7 @@ public class ParkingLot {
         }
     }
 
-    public int getNearestSlot() {
+    private int getNearestSlot() {
         for (int i = 0; i < slot.size(); i++) {
             if (slot.get(i) == null) {
                 return i;
@@ -51,7 +51,7 @@ public class ParkingLot {
         return count;
     }
 
-    public boolean checkParkedCar(int registrationNumber) {
+    public boolean checkParkedCarByRegistrationNumber(int registrationNumber) {
         for (Car car : slot) {
             if (car.registrationNumber == registrationNumber) {
                 return true;
@@ -61,7 +61,7 @@ public class ParkingLot {
     }
 
     public Car unPark(Car car) {
-        if (checkParkedCar(car.registrationNumber)) {
+        if (checkParkedCarByRegistrationNumber(car.registrationNumber)) {
             slot.set(slot.indexOf(car), null);
             this.isFull = false;
             return car;
@@ -73,6 +73,6 @@ public class ParkingLot {
         if (slot.get(slotNumber) == null) {
             return true;
         }
-        throw new NullPointerException("Slot is not empty");
+        throw new IllegalArgumentException("Slot is not empty");
     }
 }

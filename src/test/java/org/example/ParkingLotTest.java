@@ -76,15 +76,15 @@ class ParkingLotTest {
         Car firstCar = new Car(123, CarColor.RED);
         Car secondCar = new Car(234, CarColor.BLUE);
         Car thirdCar = new Car(345, CarColor.GREEN);
-        parkingLot.park(firstCar);
-        parkingLot.park(secondCar);
-        parkingLot.park(thirdCar);
+        parkingLot.park(firstCar); // slot -> 0
+        parkingLot.park(secondCar); // slot -> 1
+        parkingLot.park(thirdCar); // slot -> 2
         // un-park secondCar
         parkingLot.unPark(secondCar);
 
         int expectedSlot = 1;
 
-        assertEquals(expectedSlot, parkingLot.getNearestSlot());
+        assertTrue(parkingLot.checkParkingSlot(expectedSlot));
     }
 
     // test to get count of all cars of given color
@@ -136,7 +136,7 @@ class ParkingLotTest {
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
 
-        assertTrue(parkingLot.checkParkedCar(thirdCar.registrationNumber));
+        assertTrue(parkingLot.checkParkedCarByRegistrationNumber(thirdCar.registrationNumber));
     }
 
     @Test
@@ -148,7 +148,7 @@ class ParkingLotTest {
         parkingLot.park(firstCar);
 
         assertThrows(NullPointerException.class, () -> {
-            parkingLot.checkParkedCar(secondCar.registrationNumber);
+            parkingLot.checkParkedCarByRegistrationNumber(secondCar.registrationNumber);
         });
     }
 
