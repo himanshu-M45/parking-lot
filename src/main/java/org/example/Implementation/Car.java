@@ -6,6 +6,7 @@ import org.example.Exceptions.InvalidValueException;
 public class Car {
     public int registrationNumber;
     public CarColor color;
+    public boolean isCarParked = false;
 
     public Car(int registrationNumber, CarColor color) {
         if (registrationNumber <= 0) {
