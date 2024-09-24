@@ -25,8 +25,8 @@ public class ParkingLot {
         if (this.isFull) {
             throw new ParkingLotIsFullException("Parking lot is full");
         }
-        int slotToPark = getNearestSlot();
-        slot.set(slotToPark, car);
+        int slotToPark = getNearestSlot(); // get the nearest slot to park the car
+        slot.set(slotToPark, car); // park the car
         if (slot.stream().allMatch(Objects::nonNull)) {
             this.isFull = true;
         }
@@ -51,7 +51,7 @@ public class ParkingLot {
         return count;
     }
 
-    public boolean checkParkedCarByRegistrationNumber(int registrationNumber) {
+    public boolean isParkedCarByRegistrationNumber(int registrationNumber) {
         for (Car car : slot) {
             if (car.registrationNumber == registrationNumber) {
                 return true;
@@ -61,7 +61,7 @@ public class ParkingLot {
     }
 
     public Car unPark(Car car) {
-        if (checkParkedCarByRegistrationNumber(car.registrationNumber)) {
+        if (isParkedCarByRegistrationNumber(car.registrationNumber)) {
             slot.set(slot.indexOf(car), null);
             this.isFull = false;
             return car;
@@ -70,9 +70,6 @@ public class ParkingLot {
     }
 
     public boolean checkParkingSlot(int slotNumber) {
-        if (slot.get(slotNumber) == null) {
-            return true;
-        }
-        throw new IllegalArgumentException("Slot is not empty");
+        return slot.get(slotNumber) == null;
     }
 }

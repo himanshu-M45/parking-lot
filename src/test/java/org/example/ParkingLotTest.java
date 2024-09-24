@@ -7,10 +7,15 @@ import org.example.Implementation.Car;
 import org.example.Implementation.ParkingLot;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import static org.mockito.Mockito.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingLotTest {
-    // test to check creation parking lot
+    // ------------------------------- parking lot tests -------------------------------
     @Test
     void testParkingLotWithZeroSlotsThrowsException() {
         assertThrows(InvalidValueException.class, () -> {
@@ -32,7 +37,7 @@ class ParkingLotTest {
         assertFalse(parkingLot.isFull);
     }
 
-    // test park feature
+    // ------------------------------- park car tests -------------------------------
     @Test
     void testParkingLotWithOneSlotIsFullWhenCarParked() {
         ParkingLot parkingLot = new ParkingLot(1);
@@ -68,7 +73,7 @@ class ParkingLotTest {
         });
     }
 
-    // test to park at nearest spot possible
+    // ------------------------------- park car at nearest spot tests -------------------------------
     @Test
     void testParkAtNearestSpot() {
         ParkingLot parkingLot = new ParkingLot(5);
@@ -79,15 +84,15 @@ class ParkingLotTest {
         parkingLot.park(firstCar); // slot -> 0
         parkingLot.park(secondCar); // slot -> 1
         parkingLot.park(thirdCar); // slot -> 2
-        // un-park secondCar
-        parkingLot.unPark(secondCar);
+
+        parkingLot.unPark(secondCar); // un-park secondCar
 
         int expectedSlot = 1;
 
         assertTrue(parkingLot.checkParkingSlot(expectedSlot));
     }
 
-    // test to get count of all cars of given color
+    // ------------------------------- count cars by color tests -------------------------------
     @Test
     void testGetCountOfBlueColorCars() {
         ParkingLot parkingLot = new ParkingLot(7);
@@ -124,7 +129,7 @@ class ParkingLotTest {
         assertEquals(expectedCount, parkingLot.getCountOfCarsByColor(CarColor.BLACK));
     }
 
-    // test to check availability of car in parking lot
+    // ------------------------------- check car availability by regNo. -------------------------------
     @Test
     void testCheckTheGivenCarIsAvailableInParkingLot() {
         ParkingLot parkingLot = new ParkingLot(7);
@@ -136,7 +141,7 @@ class ParkingLotTest {
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
 
-        assertTrue(parkingLot.checkParkedCarByRegistrationNumber(thirdCar.registrationNumber));
+        assertTrue(parkingLot.isParkedCarByRegistrationNumber(thirdCar.registrationNumber));
     }
 
     @Test
@@ -148,11 +153,11 @@ class ParkingLotTest {
         parkingLot.park(firstCar);
 
         assertThrows(NullPointerException.class, () -> {
-            parkingLot.checkParkedCarByRegistrationNumber(secondCar.registrationNumber);
+            parkingLot.isParkedCarByRegistrationNumber(secondCar.registrationNumber);
         });
     }
 
-    // test to check un-park a car from parking lot
+    // ------------------------------- un-park car tests -------------------------------
     @Test
     void testUnParkCarFromParkingLotWhereIsAvailable() {
         ParkingLot parkingLot = new ParkingLot(7);
@@ -198,4 +203,73 @@ class ParkingLotTest {
         assertTrue(parkingLot.checkParkingSlot(slotNumber));
     }
 
+    // ------------------------------- spy tests -------------------------------
+    @Test
+    void testMockitoSpyOnPrivateMethod() {
+        ParkingLot parkingLot = spy(new ParkingLot(7));
+
+        Car firstCar = new Car(123, CarColor.RED);
+        Car secondCar = new Car(234, CarColor.BLUE);
+
+        // Mock the park method
+        doNothing().when(parkingLot).park(any(Car.class));
+
+        parkingLot.park(firstCar);
+        parkingLot.park(secondCar);
+
+        verify(parkingLot, times(2)).park(any(Car.class));
+    }
+
+    // ------------------------------- mock tests -------------------------------
+    @Test
+    void testMockParkingLot() {
+        ParkingLot mockParkingLot = mock(ParkingLot.class);
+
+        when(mockParkingLot.getCountOfCarsByColor(CarColor.BLUE)).thenReturn(2);
+
+        assertEquals(2, mockParkingLot.getCountOfCarsByColor(CarColor.BLUE));
+
+        verify(mockParkingLot).getCountOfCarsByColor(CarColor.BLUE);
+    }
+
+    @Test
+    void testMockCarAndParkIt() {
+        Car mockCar = mock(Car.class);
+
+        when(mockCar.getRegistrationNumber()).thenReturn(123);
+        when(mockCar.getColor()).thenReturn(CarColor.RED);
+
+        ParkingLot parkingLot = new ParkingLot(2);
+
+        parkingLot.park(mockCar);
+
+        assertFalse(parkingLot.checkParkingSlot(0));
+        assertEquals(CarColor.RED, mockCar.getColor());
+
+        verify(mockCar, times(1)).getRegistrationNumber();
+        verify(mockCar, times(1)).getColor();
+    }
+
+    // ------------------------------- reflection tests -------------------------------
+    @Test
+    void testReflectionOnPrivateMethod() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        ParkingLot parkingLot = new ParkingLot(7);
+
+        Car firstCar = new Car(123, CarColor.RED);
+        Car secondCar = new Car(234, CarColor.BLUE);
+        Car thirdCar = new Car(345, CarColor.GREEN);
+
+        // Use reflection to access the private method
+        Method getNearestSlotMethod = ParkingLot.class.getDeclaredMethod("getNearestSlot");
+        getNearestSlotMethod.setAccessible(true);
+
+        parkingLot.park(firstCar);
+        parkingLot.park(secondCar);
+        parkingLot.park(thirdCar);
+
+        parkingLot.unPark(secondCar);
+
+        int expectedSlot = 1;
+        assertEquals(expectedSlot, getNearestSlotMethod.invoke(parkingLot));
+    }
 }
