@@ -1,5 +1,6 @@
 package org.example.Implementation;
 
+import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
 import org.example.Exceptions.ParkingLotIsFullException;
 import org.example.Exceptions.ParkingLotNotFoundException;
@@ -33,20 +34,13 @@ public class Attendant {
     }
 
     public Car unpark(Ticket carTicket) {
-        ParkingLot parkingLot = findParkingLotByObjectId(carTicket.parkingLotObjId);
-        if (parkingLot != null) {
-            return parkingLot.unpark(carTicket);
-        }
-        throw new ParkingLotNotFoundException("Parking lot not found");
-    }
-
-    private ParkingLot findParkingLotByObjectId(int parkingLotObjId) {
-        // find the parking lot by the object id
-        for (ParkingLot parkingLot: assignedParkingLots) {
-            if (System.identityHashCode(parkingLot) == parkingLotObjId) {
-                return parkingLot;
+        for (ParkingLot parkingLot : assignedParkingLots) {
+            try {
+                return parkingLot.unpark(carTicket);
+            } catch (InvalidTicketException e) {
+                // Continue searching in the next parking lot
             }
         }
-        return null;
+        throw new InvalidTicketException("Parking lot not found");
     }
 }

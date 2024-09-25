@@ -182,7 +182,7 @@ class ParkingLotTest {
 
         Car car = new Car(1, CarColor.YELLOW);
 
-        Ticket dummyTicket = new Ticket(car, 5, 1);
+        Ticket dummyTicket = new Ticket(car, 5);
 
         assertThrows(InvalidTicketException.class, () -> parkingLot.unpark(dummyTicket));
     }

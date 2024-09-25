@@ -36,7 +36,7 @@ public class ParkingLot {
         if (slot.stream().allMatch(Objects::nonNull)) {
             this.isFull = true;
         }
-        return new Ticket(car, slotToPark, System.identityHashCode(this));
+        return new Ticket(car, slotToPark);
     }
 
     private int getNearestSlot() {
@@ -61,14 +61,14 @@ public class ParkingLot {
     public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
         for (Car car : slot) {
             if (car.registrationNumber == registrationNumber) {
-                return new Ticket(car, getCarParkingSlotNumber(car), System.identityHashCode(this));
+                return new Ticket(car, getCarParkingSlotNumber(car));
             }
         }
         throw new NullPointerException("Car not found in parking lot");
     }
 
     public Car unpark(Ticket carTicket) {
-        if (slot.get(carTicket.slotNumber) != null && System.identityHashCode(this) == carTicket.parkingLotObjId) {
+        if (slot.get(carTicket.slotNumber) != null && carTicket.car.isCarParked) {
             Car car = slot.get(carTicket.slotNumber);
             slot.set(carTicket.slotNumber, null);
             car.isCarParked = false;
