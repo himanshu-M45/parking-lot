@@ -3,7 +3,6 @@ package org.example.Implementation;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
 import org.example.Exceptions.ParkingLotIsFullException;
-import org.example.Exceptions.ParkingLotNotFoundException;
 
 import java.util.ArrayList;
 
@@ -17,11 +16,6 @@ public class Attendant {
             throw new ParkingLotAleradyAssignedException("Parking lot already assigned");
         }
         assignedParkingLots.add(parkingLot);
-    }
-
-    public int getTotalParkingLot() {
-        // return the total number of parking lots assigned to the attendant
-        return assignedParkingLots.size();
     }
 
     public Ticket park(Car car) {

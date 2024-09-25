@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ParkingLot {
     public boolean isFull = false;
-    private final ArrayList<Car> slot;
+    private final ArrayList<Slot> slot;
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
@@ -19,7 +19,7 @@ public class ParkingLot {
         }
         this.slot = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
-            slot.add(null); // Initialize all slots as empty
+            slot.add(new Slot(i)); // Initialize all slots as empty
         }
     }
 
@@ -27,13 +27,13 @@ public class ParkingLot {
         if (this.isFull) {
             throw new ParkingLotIsFullException("Parking lot is full");
         }
-        if (slot.stream().anyMatch(car::equals) || car.isCarParked) {
+        if (slot.stream().anyMatch(slot -> slot.isOccupied() && slot.getCar().equals(car)) || car.isCarParked) {
             throw new CarAlreadyParkedException("Car already parked");
         }
         int slotToPark = getNearestSlot(); // get the nearest slot to park the car
-        slot.set(slotToPark, car); // park the car
+        slot.get(slotToPark).park(car); // park the car
         car.isCarParked = true;
-        if (slot.stream().allMatch(Objects::nonNull)) {
+        if (slot.stream().allMatch(Slot::isOccupied)) {
             this.isFull = true;
         }
         return new Ticket(car, slotToPark);
@@ -41,7 +41,7 @@ public class ParkingLot {
 
     private int getNearestSlot() {
         for (int i = 0; i < slot.size(); i++) {
-            if (slot.get(i) == null) {
+            if (!slot.get(i).isOccupied()) {
                 return i;
             }
         }
@@ -50,8 +50,8 @@ public class ParkingLot {
 
     public int getCountOfCarsByColor(CarColor carColor) {
         int count = 0;
-        for (Car car : slot) {
-            if (car != null && car.color == carColor) {
+        for (Slot slot : slot) {
+            if (slot.isOccupied() && slot.getCar().color == carColor) {
                 count++;
             }
         }
@@ -59,18 +59,19 @@ public class ParkingLot {
     }
 
     public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
-        for (Car car : slot) {
-            if (car.registrationNumber == registrationNumber) {
-                return new Ticket(car, getCarParkingSlotNumber(car));
+        for (Slot slot : slot) {
+            if (slot.isOccupied() && slot.getCar().registrationNumber == registrationNumber) {
+                return new Ticket(slot.getCar(), slot.getSlotNumber());
             }
         }
         throw new NullPointerException("Car not found in parking lot");
     }
 
     public Car unpark(Ticket carTicket) {
-        if (slot.get(carTicket.slotNumber) != null && carTicket.car.isCarParked) {
-            Car car = slot.get(carTicket.slotNumber);
-            slot.set(carTicket.slotNumber, null);
+        Slot slot = this.slot.get(carTicket.slotNumber);
+        if (slot.isOccupied() && carTicket.car.isCarParked) {
+            Car car = slot.getCar();
+            slot.unpark();
             car.isCarParked = false;
             if (this.isFull) this.isFull = false;
             return car;
@@ -80,9 +81,9 @@ public class ParkingLot {
     }
 
     public int getCarParkingSlotNumber(Car car) {
-        for (int i = 0; i < slot.size(); i++) {
-            if (slot.get(i) != null && slot.get(i).registrationNumber == car.registrationNumber) {
-                return i;
+        for (Slot slot : slot) {
+            if (slot.isOccupied() && slot.getCar().registrationNumber == car.registrationNumber) {
+                return slot.getSlotNumber();
             }
         }
         throw new NullPointerException("Car not found in parking lot");

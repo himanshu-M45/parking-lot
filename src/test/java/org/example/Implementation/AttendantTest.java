@@ -37,20 +37,6 @@ class AttendantTest {
     }
 
     @Test
-    void testGetTotalAssignedParkingLots() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        ParkingLot anotherParkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-
-        attendant.assign(parkingLot);
-        attendant.assign(anotherParkingLot);
-
-        int assignedParkingLots = 2;
-
-        assertEquals(assignedParkingLots, attendant.getTotalParkingLot());
-    }
-
-    @Test
     void testAssigningSameParkingLotTwice() {
         ParkingLot firstparkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
