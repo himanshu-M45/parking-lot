@@ -71,7 +71,8 @@ public class ParkingLot {
         if (slot.get(carTicket.slotNumber) != null && System.identityHashCode(this) == carTicket.parkingLotObjId) {
             Car car = slot.get(carTicket.slotNumber);
             slot.set(carTicket.slotNumber, null);
-            this.isFull = false;
+            car.isCarParked = false;
+            if (this.isFull) this.isFull = false;
             return car;
         } else {
             throw new InvalidTicketException("Invalid ticket");

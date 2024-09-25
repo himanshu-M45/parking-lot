@@ -23,7 +23,6 @@ public class Attendant {
         return assignedParkingLots.size();
     }
 
-
     public Ticket park(ParkingLot parkingLot, Car car) {
         return parkingLot.park(car);
     }
