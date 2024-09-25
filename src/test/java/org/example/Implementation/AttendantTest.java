@@ -61,7 +61,7 @@ class AttendantTest {
         attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
 
-        assertEquals(car, carTicket.car);
+        assertEquals(car.registrationNumber, carTicket.registrationNumber);
     }
 
     @Test
@@ -145,8 +145,8 @@ class AttendantTest {
         firstAttendant.assign(firstParkingLot);
         secondAttendant.assign(secondParkingLot);
 
-        assertEquals(firstCar, firstAttendant.park(firstCar).car);
-        assertEquals(secondCar, secondAttendant.park(secondCar).car);
+        assertEquals(firstCar.registrationNumber, firstAttendant.park(firstCar).registrationNumber);
+        assertEquals(secondCar.registrationNumber, secondAttendant.park(secondCar).registrationNumber);
     }
 
     // ------------------------------- unpark through attendant tests -------------------------------

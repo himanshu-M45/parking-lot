@@ -2,12 +2,10 @@ package org.example.Implementation;
 
 public class Slot {
     private final int slotNumber;
-    private boolean isOccupied;
     private Car car;
 
     public Slot(int slotNumber) {
         this.slotNumber = slotNumber;
-        this.isOccupied = false;
         this.car = null;
     }
 
@@ -16,7 +14,7 @@ public class Slot {
     }
 
     public boolean isOccupied() {
-        return isOccupied;
+        return car != null;
     }
 
     public Car getCar() {
@@ -25,11 +23,11 @@ public class Slot {
 
     public void park(Car car) {
         this.car = car;
-        this.isOccupied = true;
+        car.isCarParked = true;
     }
 
     public void unpark() {
+        this.car.isCarParked = false;
         this.car = null;
-        this.isOccupied = false;
     }
 }

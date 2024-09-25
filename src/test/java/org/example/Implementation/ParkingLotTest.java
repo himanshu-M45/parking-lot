@@ -133,7 +133,7 @@ class ParkingLotTest {
         parkingLot.park(thirdCar);
         Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(thirdCar.registrationNumber);
 
-        assertEquals(thirdCar, expectedTicket.car);
+        assertEquals(thirdCar.registrationNumber, expectedTicket.registrationNumber);
     }
 
     @Test
@@ -183,7 +183,7 @@ class ParkingLotTest {
 
         Car car = new Car(1, CarColor.YELLOW);
 
-        Ticket dummyTicket = new Ticket(car, 5);
+        Ticket dummyTicket = new Ticket(car.registrationNumber, 5);
 
         assertThrows(InvalidTicketException.class, () -> parkingLot.unpark(dummyTicket));
     }

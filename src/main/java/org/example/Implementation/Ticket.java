@@ -1,11 +1,11 @@
 package org.example.Implementation;
 
 public class Ticket {
-    public final Car car;
-    public final int slotNumber;
+    public final Integer registrationNumber;
+    public final Integer slotNumber;
 
-    public Ticket(Car car, int slotNumber) {
-        this.car = car;
+    public Ticket(Integer registrationNumber, Integer slotNumber) {
+        this.registrationNumber = registrationNumber;
         this.slotNumber = slotNumber;
     }
 }
