@@ -58,8 +58,7 @@ public class ParkingLot {
     public Car unpark(Ticket carTicket) {
         Slot slot = this.slots.get(carTicket.slotNumber);
         if (slot.isOccupied() && slot.getCar().registrationNumber == carTicket.registrationNumber) {
-            Car car = slot.getCar();
-            slot.unpark();
+            Car car = slot.unpark();
             if (this.isFull) this.isFull = false;
             return car;
         } else {

@@ -1,5 +1,8 @@
 package org.example.Implementation;
 
+import org.example.Exceptions.CarAlreadyParkedException;
+import org.example.Exceptions.InvalidTicketException;
+
 public class Slot {
     private final int slotNumber;
     private Car car;
@@ -26,8 +29,10 @@ public class Slot {
         car.isCarParked = true;
     }
 
-    public void unpark() {
+    public Car unpark() {
+        Car carToUnpark = this.car;
         this.car.isCarParked = false;
         this.car = null;
+        return carToUnpark;
     }
 }
