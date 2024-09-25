@@ -1,7 +1,6 @@
 package org.example.Implementation;
 
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
-import org.example.Exceptions.ParkingLotIsFullException;
 import org.example.Exceptions.ParkingLotNotFoundException;
 
 import java.util.ArrayList;

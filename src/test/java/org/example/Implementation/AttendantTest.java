@@ -16,7 +16,7 @@ class AttendantTest {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
 
-        assertDoesNotThrow(() -> {attendant.assign(parkingLot);});
+        assertDoesNotThrow(() -> attendant.assign(parkingLot));
     }
 
     @Test
@@ -25,7 +25,7 @@ class AttendantTest {
         ParkingLot anotherParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         attendant.assign(parkingLot);
-        assertDoesNotThrow(() -> {attendant.assign(anotherParkingLot);});
+        assertDoesNotThrow(() -> attendant.assign(anotherParkingLot));
     }
 
     @Test
@@ -33,7 +33,7 @@ class AttendantTest {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         attendant.assign(parkingLot);
-        assertThrows(ParkingLotAleradyAssignedException.class, () -> {attendant.assign(parkingLot);});
+        assertThrows(ParkingLotAleradyAssignedException.class, () -> attendant.assign(parkingLot));
     }
 
     @Test
@@ -57,7 +57,7 @@ class AttendantTest {
 
         attendant.assign(firstparkingLot);
 
-        assertThrows(ParkingLotAleradyAssignedException.class, () -> {attendant.assign(firstparkingLot);});
+        assertThrows(ParkingLotAleradyAssignedException.class, () -> attendant.assign(firstparkingLot));
 
     }
 
@@ -84,7 +84,7 @@ class AttendantTest {
 
         attendant.park(parkingLot, firstCar);
 
-        assertThrows(ParkingLotIsFullException.class, () -> {attendant.park(parkingLot, secondCar);});
+        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(parkingLot, secondCar));
     }
 
     @Test
@@ -96,7 +96,7 @@ class AttendantTest {
 
         attendant.park(parkingLot, car);
 
-        assertThrows(CarAlreadyParkedException.class, () -> {attendant.park(parkingLot, car);});
+        assertThrows(CarAlreadyParkedException.class, () -> attendant.park(parkingLot, car));
     }
 
     @Test
@@ -109,7 +109,7 @@ class AttendantTest {
 
         attendant.park(parkingLot, firstCar);
 
-        assertDoesNotThrow(() -> {attendant.park(parkingLot, secondCar);});
+        assertDoesNotThrow(() -> attendant.park(parkingLot, secondCar));
     }
 
     @Test
@@ -122,8 +122,10 @@ class AttendantTest {
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
-        assertDoesNotThrow(() -> {attendant.park(firstParkingLot, firstCar);});
-        assertDoesNotThrow(() -> {attendant.park(secondParkingLot, secondCar);});
+        assertDoesNotThrow(() -> {
+            attendant.park(firstParkingLot, firstCar);
+            attendant.park(secondParkingLot, secondCar);
+        });
     }
 
     @Test
@@ -137,7 +139,7 @@ class AttendantTest {
 
         attendant.park(firstParkingLot, car);
 
-        assertThrows(CarAlreadyParkedException.class, () -> {attendant.park(secondParkingLot, car);});
+        assertThrows(CarAlreadyParkedException.class, () -> attendant.park(secondParkingLot, car));
     }
 
     @Test
@@ -196,7 +198,7 @@ class AttendantTest {
         Ticket carTicket = attendant.park(parkingLot, car);
         attendant.unPark(carTicket);
 
-        assertThrows(InvalidTicketException.class, () -> {attendant.unPark(carTicket);});
+        assertThrows(InvalidTicketException.class, () -> attendant.unPark(carTicket));
     }
 
     @Test

@@ -15,16 +15,12 @@ class ParkingLotTest {
     // ------------------------------- parking lot tests -------------------------------
     @Test
     void testParkingLotWithZeroSlotsThrowsException() {
-        assertThrows(InvalidValueException.class, () -> {
-            new ParkingLot(0);
-        });
+        assertThrows(InvalidValueException.class, () -> new ParkingLot(0));
     }
 
     @Test
     void testParkingLotWithNegativeSlotsThrowsException() {
-        assertThrows(InvalidValueException.class, () -> {
-            new ParkingLot(-32);
-        });
+        assertThrows(InvalidValueException.class, () -> new ParkingLot(-32));
     }
 
     @Test
@@ -64,9 +60,7 @@ class ParkingLotTest {
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
 
-        assertThrows(ParkingLotIsFullException.class, () -> {
-            parkingLot.park(thirdCar);
-        });
+        assertThrows(ParkingLotIsFullException.class, () -> parkingLot.park(thirdCar));
     }
 
     // ------------------------------- park car at nearest spot tests -------------------------------
@@ -78,9 +72,9 @@ class ParkingLotTest {
         Car thirdCar = new Car(345, CarColor.GREEN);
         Car fourthCar = new Car(456, CarColor.BLACK);
 
-        Ticket fistCarTicket = parkingLot.park(firstCar); // slot -> 0
+        parkingLot.park(firstCar); // slot -> 0
         Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
-        Ticket thirdCarTicket = parkingLot.park(thirdCar); // slot -> 2
+        parkingLot.park(thirdCar); // slot -> 2
 
         parkingLot.unPark(secondCarTicket); // un-park firstCar
 
@@ -147,9 +141,7 @@ class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(123, CarColor.RED);
 
-        assertThrows(NullPointerException.class, () -> {
-            parkingLot.getCarParkedInfoByRegNo(car.registrationNumber);
-        });
+        assertThrows(NullPointerException.class, () -> parkingLot.getCarParkedInfoByRegNo(car.registrationNumber));
     }
 
     // ------------------------------- un-park car tests -------------------------------
@@ -167,15 +159,12 @@ class ParkingLotTest {
     @Test
     void testCannotUnParkCarFromParkingLotWithDifferentTicket() {
         ParkingLot parkingLot = new ParkingLot(2);
-        Car car = new Car(123, CarColor.RED);
-        Car anotherCar = new Car(234, CarColor.BLUE);
+        Car car = new Car(234, CarColor.BLUE);
 
-        Ticket firstCarTicket = parkingLot.park(car);
-        Ticket anotherTicket = parkingLot.park(anotherCar);
-
+        Ticket anotherTicket = parkingLot.park(car);
         parkingLot.unPark(anotherTicket);
 
-        assertThrows(InvalidTicketException.class, () -> {parkingLot.unPark(anotherTicket);});
+        assertThrows(InvalidTicketException.class, () -> parkingLot.unPark(anotherTicket));
     }
 
     @Test
@@ -184,9 +173,7 @@ class ParkingLotTest {
         Car car = new Car(123, CarColor.RED);
         parkingLot.park(car);
 
-        assertThrows(CarAlreadyParkedException.class, () -> {
-            parkingLot.park(car);
-        });
+        assertThrows(CarAlreadyParkedException.class, () -> parkingLot.park(car));
     }
 
     @Test
@@ -197,9 +184,7 @@ class ParkingLotTest {
 
         Ticket dummyTicket = new Ticket(car, 5, 1);
 
-        assertThrows(InvalidTicketException.class, () -> {
-            parkingLot.unPark(dummyTicket);
-        });
+        assertThrows(InvalidTicketException.class, () -> parkingLot.unPark(dummyTicket));
     }
 
     // ------------------------------- mock tests -------------------------------
@@ -242,9 +227,9 @@ class ParkingLotTest {
         Method getNearestSlotMethod = ParkingLot.class.getDeclaredMethod("getNearestSlot");
         getNearestSlotMethod.setAccessible(true);
 
-        Ticket fistCarTicket = parkingLot.park(firstCar); // slot -> 0
+        parkingLot.park(firstCar); // slot -> 0
         Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
-        Ticket thirdCarTicket = parkingLot.park(thirdCar); // slot -> 2
+        parkingLot.park(thirdCar); // slot -> 2
 
         parkingLot.unPark(secondCarTicket);
 
