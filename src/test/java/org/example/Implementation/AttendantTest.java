@@ -69,7 +69,7 @@ class AttendantTest {
         attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
-        Ticket carTicket = attendant.park(parkingLot, car);
+        Ticket carTicket = attendant.park(car);
 
         assertEquals(car, carTicket.car);
     }
@@ -82,9 +82,9 @@ class AttendantTest {
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
-        attendant.park(parkingLot, firstCar);
+        attendant.park(firstCar);
 
-        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(parkingLot, secondCar));
+        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(secondCar));
     }
 
     @Test
@@ -94,9 +94,9 @@ class AttendantTest {
         attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
-        attendant.park(parkingLot, car);
+        attendant.park(car);
 
-        assertThrows(CarAlreadyParkedException.class, () -> attendant.park(parkingLot, car));
+        assertThrows(CarAlreadyParkedException.class, () -> attendant.park(car));
     }
 
     @Test
@@ -107,9 +107,9 @@ class AttendantTest {
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
-        attendant.park(parkingLot, firstCar);
+        attendant.park(firstCar);
 
-        assertDoesNotThrow(() -> attendant.park(parkingLot, secondCar));
+        assertDoesNotThrow(() -> attendant.park(secondCar));
     }
 
     @Test
@@ -123,8 +123,8 @@ class AttendantTest {
         Car secondCar = new Car(2, CarColor.RED);
 
         assertDoesNotThrow(() -> {
-            attendant.park(firstParkingLot, firstCar);
-            attendant.park(secondParkingLot, secondCar);
+            attendant.park(firstCar);
+            attendant.park(secondCar);
         });
     }
 
@@ -137,9 +137,9 @@ class AttendantTest {
         attendant.assign(secondParkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
-        attendant.park(firstParkingLot, car);
+        attendant.park(car);
 
-        assertThrows(CarAlreadyParkedException.class, () -> attendant.park(secondParkingLot, car));
+        assertThrows(CarAlreadyParkedException.class, () -> attendant.park(car));
     }
 
     @Test
@@ -154,8 +154,8 @@ class AttendantTest {
         firstAttendant.assign(firstParkingLot);
         secondAttendant.assign(secondParkingLot);
 
-        assertEquals(firstCar, firstAttendant.park(firstParkingLot, firstCar).car);
-        assertEquals(secondCar, secondAttendant.park(secondParkingLot, secondCar).car);
+        assertEquals(firstCar, firstAttendant.park(firstCar).car);
+        assertEquals(secondCar, secondAttendant.park(secondCar).car);
     }
 
     // ------------------------------- unpark through attendant tests -------------------------------
@@ -166,7 +166,7 @@ class AttendantTest {
         attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
-        Ticket carTicket = attendant.park(parkingLot, car);
+        Ticket carTicket = attendant.park(car);
 
         assertEquals(car, attendant.unpark(carTicket));
     }
@@ -181,8 +181,8 @@ class AttendantTest {
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
-        Ticket firstCarTicket = attendant.park(firstParkingLot, firstCar);
-        Ticket secondCarTicket = attendant.park(secondParkingLot, secondCar);
+        Ticket firstCarTicket = attendant.park(firstCar);
+        Ticket secondCarTicket = attendant.park(secondCar);
 
         assertEquals(firstCar, attendant.unpark(firstCarTicket));
         assertEquals(secondCar, attendant.unpark(secondCarTicket));
@@ -195,7 +195,7 @@ class AttendantTest {
         attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
-        Ticket carTicket = attendant.park(parkingLot, car);
+        Ticket carTicket = attendant.park(car);
         attendant.unpark(carTicket);
 
         assertThrows(InvalidTicketException.class, () -> attendant.unpark(carTicket));
@@ -211,8 +211,8 @@ class AttendantTest {
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
-        Ticket firstCarTicket = attendant.park(firstParkingLot, firstCar);
-        Ticket secondCarTicket = attendant.park(secondParkingLot, secondCar);
+        Ticket firstCarTicket = attendant.park(firstCar);
+        Ticket secondCarTicket = attendant.park(secondCar);
 
         assertEquals(firstCar, attendant.unpark(firstCarTicket));
         assertEquals(secondCar, attendant.unpark(secondCarTicket));
@@ -230,8 +230,8 @@ class AttendantTest {
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
-        Ticket firstCarTicket = firstAttendant.park(firstParkingLot, firstCar);
-        Ticket secondCarTicket = firstAttendant.park(secondParkingLot, secondCar);
+        Ticket firstCarTicket = firstAttendant.park(firstCar);
+        Ticket secondCarTicket = secondAttendant.park(secondCar);
 
         assertEquals(firstCar, firstAttendant.unpark(firstCarTicket));
         assertEquals(secondCar, secondAttendant.unpark(secondCarTicket));

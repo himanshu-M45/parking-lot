@@ -1,6 +1,7 @@
 package org.example.Implementation;
 
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
+import org.example.Exceptions.ParkingLotIsFullException;
 import org.example.Exceptions.ParkingLotNotFoundException;
 
 import java.util.ArrayList;
@@ -22,8 +23,13 @@ public class Attendant {
         return assignedParkingLots.size();
     }
 
-    public Ticket park(ParkingLot parkingLot, Car car) {
-        return parkingLot.park(car);
+    public Ticket park(Car car) {
+        for (ParkingLot parkingLot : assignedParkingLots) {
+            if (!parkingLot.isFull) {
+                return parkingLot.park(car);
+            }
+        }
+        throw new ParkingLotIsFullException("No available parking lot found");
     }
 
     public Car unpark(Ticket carTicket) {
