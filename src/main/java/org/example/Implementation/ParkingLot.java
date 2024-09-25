@@ -10,15 +10,15 @@ import java.util.ArrayList;
 
 public class ParkingLot {
     public boolean isFull = false;
-    private final ArrayList<Slot> slot;
+    private final ArrayList<Slot> slots;
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
             throw new InvalidValueException("Number of slots should be greater than 0");
         }
-        this.slot = new ArrayList<>(numberOfSlots);
+        this.slots = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
-            slot.add(new Slot(i)); // Initialize all slots as empty
+            slots.add(new Slot(i)); // Initialize all slots as empty
         }
     }
 
@@ -26,18 +26,11 @@ public class ParkingLot {
         if (car.isCarParked) {
             throw new CarAlreadyParkedException("Car already parked");
         }
-        int slotToPark = getNearestSlot(); // get the nearest slot to park the car
-        slot.get(getNearestSlot()).park(car); // park the car
-        if (slot.stream().allMatch(Slot::isOccupied)) {
-            this.isFull = true;
-        }
-        return new Ticket(car.registrationNumber, slotToPark);
-    }
-
-    private int getNearestSlot() {
-        for (int i = 0; i < slot.size(); i++) {
-            if (!slot.get(i).isOccupied()) {
-                return i;
+        for (Slot slot : slots) {
+            if (!slot.isOccupied()) {
+                slot.park(car);
+                this.isFull = slots.stream().allMatch(Slot::isOccupied);
+                return new Ticket(car.registrationNumber, slot.getSlotNumber());
             }
         }
         throw new ParkingLotIsFullException("No empty slot found");
@@ -45,7 +38,7 @@ public class ParkingLot {
 
     public int getCountOfCarsByColor(CarColor carColor) {
         int count = 0;
-        for (Slot slot : slot) {
+        for (Slot slot : slots) {
             if (slot.isOccupied() && slot.getCar().color == carColor) {
                 count++;
             }
@@ -54,7 +47,7 @@ public class ParkingLot {
     }
 
     public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
-        for (Slot slot : slot) {
+        for (Slot slot : slots) {
             if (slot.isOccupied() && slot.getCar().registrationNumber == registrationNumber) {
                 return new Ticket(slot.getCar().registrationNumber, slot.getSlotNumber());
             }
@@ -63,7 +56,7 @@ public class ParkingLot {
     }
 
     public Car unpark(Ticket carTicket) {
-        Slot slot = this.slot.get(carTicket.slotNumber);
+        Slot slot = this.slots.get(carTicket.slotNumber);
         if (slot.isOccupied() && slot.getCar().registrationNumber == carTicket.registrationNumber) {
             Car car = slot.getCar();
             slot.unpark();
@@ -75,7 +68,7 @@ public class ParkingLot {
     }
 
     public int getCarParkingSlotNumber(Car car) {
-        for (Slot slot : slot) {
+        for (Slot slot : slots) {
             if (slot.isOccupied() && slot.getCar().registrationNumber == car.registrationNumber) {
                 return slot.getSlotNumber();
             }

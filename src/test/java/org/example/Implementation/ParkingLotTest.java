@@ -4,9 +4,6 @@ import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -213,28 +210,5 @@ class ParkingLotTest {
         assertEquals(CarColor.RED, mockCar.getColor());
 
         verify(mockCar, times(1)).getColor();
-    }
-
-    // ------------------------------- reflection tests -------------------------------
-    @Test
-    void testReflectionOnPrivateMethod() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        ParkingLot parkingLot = new ParkingLot(7);
-
-        Car firstCar = new Car(123, CarColor.RED);
-        Car secondCar = new Car(234, CarColor.BLUE);
-        Car thirdCar = new Car(345, CarColor.GREEN);
-
-        // Use reflection to access the private method
-        Method getNearestSlotMethod = ParkingLot.class.getDeclaredMethod("getNearestSlot");
-        getNearestSlotMethod.setAccessible(true);
-
-        parkingLot.park(firstCar); // slot -> 0
-        Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
-        parkingLot.park(thirdCar); // slot -> 2
-
-        parkingLot.unpark(secondCarTicket);
-
-        int expectedSlot = 1;
-        assertEquals(expectedSlot, getNearestSlotMethod.invoke(parkingLot));
     }
 }
