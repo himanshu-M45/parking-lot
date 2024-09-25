@@ -75,9 +75,7 @@ class ParkingLotTest {
         parkingLot.park(firstCar); // slot -> 0
         Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
         parkingLot.park(thirdCar); // slot -> 2
-
         parkingLot.unpark(secondCarTicket); // unpark firstCar
-
         parkingLot.park(fourthCar); // slot -> 0
 
         int expectedSlot = 1;
@@ -93,6 +91,7 @@ class ParkingLotTest {
         Car secondCar = new Car(234, CarColor.BLUE);
         Car thirdCar = new Car(345, CarColor.GREEN);
         Car fourthCar = new Car(456, CarColor.BLUE);
+
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
@@ -110,6 +109,7 @@ class ParkingLotTest {
         Car secondCar = new Car(234, CarColor.BLUE);
         Car thirdCar = new Car(345, CarColor.BLACK);
         Car fourthCar = new Car(456, CarColor.BLACK);
+
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
@@ -127,10 +127,10 @@ class ParkingLotTest {
         Car firstCar = new Car(123, CarColor.RED);
         Car secondCar = new Car(234, CarColor.BLUE);
         Car thirdCar = new Car(345, CarColor.GREEN);
+
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
-
         Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(thirdCar.registrationNumber);
 
         assertEquals(thirdCar, expectedTicket.car);
@@ -151,8 +151,8 @@ class ParkingLotTest {
         Car car = new Car(123, CarColor.RED);
 
         Ticket firstCarTicket = parkingLot.park(car);
-
         Car unparkedCar = parkingLot.unpark(firstCarTicket);
+
         assertEquals(car, unparkedCar);
     }
 
@@ -171,6 +171,7 @@ class ParkingLotTest {
     void testCannotParkSameCarTwice() {
         ParkingLot parkingLot = new ParkingLot(3);
         Car car = new Car(123, CarColor.RED);
+
         parkingLot.park(car);
 
         assertThrows(CarAlreadyParkedException.class, () -> parkingLot.park(car));

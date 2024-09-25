@@ -7,7 +7,6 @@ import org.example.Exceptions.InvalidValueException;
 import org.example.Exceptions.ParkingLotIsFullException;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class ParkingLot {
     public boolean isFull = false;

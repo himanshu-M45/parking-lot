@@ -24,7 +24,9 @@ class AttendantTest {
         ParkingLot parkingLot = new ParkingLot(1);
         ParkingLot anotherParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
+
         attendant.assign(parkingLot);
+
         assertDoesNotThrow(() -> attendant.assign(anotherParkingLot));
     }
 
@@ -32,7 +34,9 @@ class AttendantTest {
     void testCannotAssignSameParkingLotTwice() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
+
         attendant.assign(parkingLot);
+
         assertThrows(ParkingLotAleradyAssignedException.class, () -> attendant.assign(parkingLot));
     }
 
@@ -52,9 +56,9 @@ class AttendantTest {
     void testParkingCarThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
+        attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
 
         assertEquals(car, carTicket.car);
@@ -64,10 +68,10 @@ class AttendantTest {
     void testTryToParkCarWhenParkingLotIsFull() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(parkingLot);
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
+        attendant.assign(parkingLot);
         attendant.park(firstCar);
 
         assertThrows(ParkingLotIsFullException.class, () -> attendant.park(secondCar));
@@ -77,9 +81,9 @@ class AttendantTest {
     void testParkSameCarTwice() {
         ParkingLot parkingLot = new ParkingLot(2);
         Attendant attendant = new Attendant();
-        attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
+        attendant.assign(parkingLot);
         attendant.park(car);
 
         assertThrows(CarAlreadyParkedException.class, () -> attendant.park(car));
@@ -89,10 +93,10 @@ class AttendantTest {
     void testParkMultipleCarsInParkingLotThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(2);
         Attendant attendant = new Attendant();
-        attendant.assign(parkingLot);
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
+        attendant.assign(parkingLot);
         attendant.park(firstCar);
 
         assertDoesNotThrow(() -> attendant.park(secondCar));
@@ -103,10 +107,11 @@ class AttendantTest {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(firstParkingLot);
-        attendant.assign(secondParkingLot);
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
+
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
 
         assertDoesNotThrow(() -> {
             attendant.park(firstCar);
@@ -119,10 +124,10 @@ class AttendantTest {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(firstParkingLot);
-        attendant.assign(secondParkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
         attendant.park(car);
 
         assertThrows(CarAlreadyParkedException.class, () -> attendant.park(car));
@@ -149,9 +154,9 @@ class AttendantTest {
     void testUnparkCarThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
+        attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
 
         assertEquals(car, attendant.unpark(carTicket));
@@ -162,11 +167,11 @@ class AttendantTest {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(firstParkingLot);
-        attendant.assign(secondParkingLot);
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
         Ticket firstCarTicket = attendant.park(firstCar);
         Ticket secondCarTicket = attendant.park(secondCar);
 
@@ -178,9 +183,9 @@ class AttendantTest {
     void testUnparkAlreadyUnparkedCar() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
+        attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
         attendant.unpark(carTicket);
 
@@ -192,11 +197,11 @@ class AttendantTest {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
-        attendant.assign(firstParkingLot);
-        attendant.assign(secondParkingLot);
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
         Ticket firstCarTicket = attendant.park(firstCar);
         Ticket secondCarTicket = attendant.park(secondCar);
 
@@ -209,13 +214,12 @@ class AttendantTest {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant firstAttendant = new Attendant();
-        firstAttendant.assign(firstParkingLot);
         Attendant secondAttendant = new Attendant();
-        secondAttendant.assign(secondParkingLot);
-
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
 
+        firstAttendant.assign(firstParkingLot);
+        secondAttendant.assign(secondParkingLot);
         Ticket firstCarTicket = firstAttendant.park(firstCar);
         Ticket secondCarTicket = secondAttendant.park(secondCar);
 
