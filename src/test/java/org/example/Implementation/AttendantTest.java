@@ -158,9 +158,9 @@ class AttendantTest {
         assertEquals(secondCar, secondAttendant.park(secondParkingLot, secondCar).car);
     }
 
-    // ------------------------------- un-park through attendant tests -------------------------------
+    // ------------------------------- unpark through attendant tests -------------------------------
     @Test
-    void testUnParkCarThroughAttendant() {
+    void testUnparkCarThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         attendant.assign(parkingLot);
@@ -168,11 +168,11 @@ class AttendantTest {
 
         Ticket carTicket = attendant.park(parkingLot, car);
 
-        assertEquals(car, attendant.unPark(carTicket));
+        assertEquals(car, attendant.unpark(carTicket));
     }
 
     @Test
-    void testUnParkCarFromMultipleParkingLots() {
+    void testUnparkCarFromMultipleParkingLots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -184,25 +184,25 @@ class AttendantTest {
         Ticket firstCarTicket = attendant.park(firstParkingLot, firstCar);
         Ticket secondCarTicket = attendant.park(secondParkingLot, secondCar);
 
-        assertEquals(firstCar, attendant.unPark(firstCarTicket));
-        assertEquals(secondCar, attendant.unPark(secondCarTicket));
+        assertEquals(firstCar, attendant.unpark(firstCarTicket));
+        assertEquals(secondCar, attendant.unpark(secondCarTicket));
     }
 
     @Test
-    void testUnParkAlreadyUnParkedCar() {
+    void testUnparkAlreadyUnparkedCar() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         attendant.assign(parkingLot);
         Car car = new Car(1, CarColor.BLACK);
 
         Ticket carTicket = attendant.park(parkingLot, car);
-        attendant.unPark(carTicket);
+        attendant.unpark(carTicket);
 
-        assertThrows(InvalidTicketException.class, () -> attendant.unPark(carTicket));
+        assertThrows(InvalidTicketException.class, () -> attendant.unpark(carTicket));
     }
 
     @Test
-    void testUnParkMultipleCarsFromMultipleParkingLotsOfSameAttendant() {
+    void testUnparkMultipleCarsFromMultipleParkingLotsOfSameAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -214,12 +214,12 @@ class AttendantTest {
         Ticket firstCarTicket = attendant.park(firstParkingLot, firstCar);
         Ticket secondCarTicket = attendant.park(secondParkingLot, secondCar);
 
-        assertEquals(firstCar, attendant.unPark(firstCarTicket));
-        assertEquals(secondCar, attendant.unPark(secondCarTicket));
+        assertEquals(firstCar, attendant.unpark(firstCarTicket));
+        assertEquals(secondCar, attendant.unpark(secondCarTicket));
     }
 
     @Test
-    void testUnParkMultipleCarsFromMultipleParkingLotsOfDifferentAttendant() {
+    void testUnparkMultipleCarsFromMultipleParkingLotsOfDifferentAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant firstAttendant = new Attendant();
@@ -233,7 +233,7 @@ class AttendantTest {
         Ticket firstCarTicket = firstAttendant.park(firstParkingLot, firstCar);
         Ticket secondCarTicket = firstAttendant.park(secondParkingLot, secondCar);
 
-        assertEquals(firstCar, firstAttendant.unPark(firstCarTicket));
-        assertEquals(secondCar, secondAttendant.unPark(secondCarTicket));
+        assertEquals(firstCar, firstAttendant.unpark(firstCarTicket));
+        assertEquals(secondCar, secondAttendant.unpark(secondCarTicket));
     }
 }

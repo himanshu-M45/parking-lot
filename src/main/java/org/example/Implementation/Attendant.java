@@ -26,10 +26,10 @@ public class Attendant {
         return parkingLot.park(car);
     }
 
-    public Car unPark(Ticket carTicket) {
+    public Car unpark(Ticket carTicket) {
         ParkingLot parkingLot = findParkingLotByObjectId(carTicket.parkingLotObjId);
         if (parkingLot != null) {
-            return parkingLot.unPark(carTicket);
+            return parkingLot.unpark(carTicket);
         }
         throw new ParkingLotNotFoundException("Parking lot not found");
     }

@@ -76,7 +76,7 @@ class ParkingLotTest {
         Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
         parkingLot.park(thirdCar); // slot -> 2
 
-        parkingLot.unPark(secondCarTicket); // un-park firstCar
+        parkingLot.unpark(secondCarTicket); // unpark firstCar
 
         parkingLot.park(fourthCar); // slot -> 0
 
@@ -144,27 +144,27 @@ class ParkingLotTest {
         assertThrows(NullPointerException.class, () -> parkingLot.getCarParkedInfoByRegNo(car.registrationNumber));
     }
 
-    // ------------------------------- un-park car tests -------------------------------
+    // ------------------------------- unpark car tests -------------------------------
     @Test
-    void testUnParkCarFromParkingLot() {
+    void testUnparkCarFromParkingLot() {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(123, CarColor.RED);
 
         Ticket firstCarTicket = parkingLot.park(car);
 
-        Car unparkedCar = parkingLot.unPark(firstCarTicket);
+        Car unparkedCar = parkingLot.unpark(firstCarTicket);
         assertEquals(car, unparkedCar);
     }
 
     @Test
-    void testCannotUnParkCarFromParkingLotWithDifferentTicket() {
+    void testCannotUnparkCarFromParkingLotWithDifferentTicket() {
         ParkingLot parkingLot = new ParkingLot(2);
         Car car = new Car(234, CarColor.BLUE);
 
         Ticket anotherTicket = parkingLot.park(car);
-        parkingLot.unPark(anotherTicket);
+        parkingLot.unpark(anotherTicket);
 
-        assertThrows(InvalidTicketException.class, () -> parkingLot.unPark(anotherTicket));
+        assertThrows(InvalidTicketException.class, () -> parkingLot.unpark(anotherTicket));
     }
 
     @Test
@@ -177,14 +177,14 @@ class ParkingLotTest {
     }
 
     @Test
-    void testCannotUnParkUnavailableCarFromParkingLot() {
+    void testCannotUnparkUnavailableCarFromParkingLot() {
         ParkingLot parkingLot = new ParkingLot(12);
 
         Car car = new Car(1, CarColor.YELLOW);
 
         Ticket dummyTicket = new Ticket(car, 5, 1);
 
-        assertThrows(InvalidTicketException.class, () -> parkingLot.unPark(dummyTicket));
+        assertThrows(InvalidTicketException.class, () -> parkingLot.unpark(dummyTicket));
     }
 
     // ------------------------------- mock tests -------------------------------
@@ -231,7 +231,7 @@ class ParkingLotTest {
         Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
         parkingLot.park(thirdCar); // slot -> 2
 
-        parkingLot.unPark(secondCarTicket);
+        parkingLot.unpark(secondCarTicket);
 
         int expectedSlot = 1;
         assertEquals(expectedSlot, getNearestSlotMethod.invoke(parkingLot));

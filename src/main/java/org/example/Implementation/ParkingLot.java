@@ -67,7 +67,7 @@ public class ParkingLot {
         throw new NullPointerException("Car not found in parking lot");
     }
 
-    public Car unPark(Ticket carTicket) {
+    public Car unpark(Ticket carTicket) {
         if (slot.get(carTicket.slotNumber) != null && System.identityHashCode(this) == carTicket.parkingLotObjId) {
             Car car = slot.get(carTicket.slotNumber);
             slot.set(carTicket.slotNumber, null);
