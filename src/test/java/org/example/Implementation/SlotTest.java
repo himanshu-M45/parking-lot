@@ -9,6 +9,7 @@ class SlotTest {
     @Test
     void testSlotInitialization() {
         Slot slot = new Slot(1);
+
         assertEquals(1, slot.getSlotNumber());
         assertFalse(slot.isOccupied());
         assertNull(slot.getCar());
@@ -18,8 +19,11 @@ class SlotTest {
     void testParkCar() {
         Slot slot = new Slot(1);
         Car car = new Car(1, CarColor.BLACK);
+
         slot.park(car);
+
         assertTrue(slot.isOccupied());
+        assertTrue(slot.getCar().isCarParked);
         assertEquals(car, slot.getCar());
     }
 
@@ -27,7 +31,9 @@ class SlotTest {
     void testGetCar() {
         Slot slot = new Slot(1);
         Car car = new Car(1, CarColor.BLACK);
+
         slot.park(car);
+
         assertEquals(car, slot.getCar());
     }
 
@@ -35,9 +41,13 @@ class SlotTest {
     void testUnparkCar() {
         Slot slot = new Slot(1);
         Car car = new Car(1, CarColor.BLACK);
+
         slot.park(car);
-        slot.unpark();
+        Car unparkedCar = slot.unpark();
+
         assertFalse(slot.isOccupied());
         assertNull(slot.getCar());
+        assertFalse(unparkedCar.isCarParked);
+        assertEquals(unparkedCar, car);
     }
 }

@@ -28,9 +28,9 @@ public class ParkingLot {
         }
         for (Slot slot : slots) {
             if (!slot.isOccupied()) {
-                slot.park(car);
+                Ticket ticket = slot.park(car);
                 this.isFull = slots.stream().allMatch(Slot::isOccupied);
-                return new Ticket(car.registrationNumber, slot.getSlotNumber());
+                return ticket;
             }
         }
         throw new ParkingLotIsFullException("No empty slot found");
@@ -61,9 +61,8 @@ public class ParkingLot {
             Car car = slot.unpark();
             if (this.isFull) this.isFull = false;
             return car;
-        } else {
-            throw new InvalidTicketException("Invalid ticket");
         }
+        throw new InvalidTicketException("Invalid ticket");
     }
 
     public int getCarParkingSlotNumber(Car car) {

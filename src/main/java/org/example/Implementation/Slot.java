@@ -1,7 +1,6 @@
 package org.example.Implementation;
 
 import org.example.Exceptions.CarAlreadyParkedException;
-import org.example.Exceptions.InvalidTicketException;
 
 public class Slot {
     private final int slotNumber;
@@ -12,21 +11,25 @@ public class Slot {
         this.car = null;
     }
 
-    public int getSlotNumber() {
-        return slotNumber;
-    }
-
     public boolean isOccupied() {
         return car != null;
+    }
+
+    public int getSlotNumber() {
+        return slotNumber;
     }
 
     public Car getCar() {
         return car;
     }
 
-    public void park(Car car) {
+    public Ticket park(Car car) {
+        if (this.car != null) {
+            throw new CarAlreadyParkedException("Slot is already occupied");
+        }
         this.car = car;
         car.isCarParked = true;
+        return new Ticket(car.registrationNumber, this.slotNumber);
     }
 
     public Car unpark() {
