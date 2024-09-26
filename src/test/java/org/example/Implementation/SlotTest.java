@@ -1,6 +1,7 @@
 package org.example.Implementation;
 
 import org.example.Enum.CarColor;
+import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
 import org.junit.jupiter.api.Test;
 
@@ -46,5 +47,43 @@ class SlotTest {
         attendant.unpark(carTicket);
 
         assertThrows(InvalidTicketException.class, () -> attendant.unpark(carTicket));
+    }
+
+    @Test
+    void testGetTicketIfCarMatches() {
+        Slot slot = new Slot(1);
+        Car car = new Car(1, CarColor.BLACK);
+
+        slot.park(car);
+        Ticket carTicket = slot.getTicketIfCarMatches(1);
+
+        assertNotNull(carTicket);
+    }
+
+    @Test
+    void testGetTicketIfCarMatchesIfCarIsNotAvailable() {
+        Slot slot = new Slot(1);
+        Car car = new Car(1, CarColor.BLACK);
+
+        slot.park(car);
+
+        assertThrows(CarNotParkedException.class, () -> slot.getTicketIfCarMatches(2));
+    }
+
+    @Test
+    void testCheckBlackColorCarIsParkedInSlot() {
+        Slot slot = new Slot(1);
+        Car car = new Car(1, CarColor.BLACK);
+
+        slot.park(car);
+
+        assertTrue(slot.isCarColor(CarColor.BLACK));
+    }
+
+    @Test
+    void testCheckBlackColorCarIsNotParkedInSlot() {
+        Slot slot = new Slot(1);
+
+        assertFalse(slot.isCarColor(CarColor.BLACK));
     }
 }

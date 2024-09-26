@@ -2,6 +2,7 @@ package org.example.Implementation;
 
 import org.example.Enum.CarColor;
 import org.example.Exceptions.CarAlreadyParkedException;
+import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
 
 public class Slot {
@@ -40,7 +41,7 @@ public class Slot {
         if (this.car != null && this.car.registrationNumber == registrationNumber) {
             return new Ticket(this.car.registrationNumber, this.slotNumber);
         }
-        return null;
+        throw new CarNotParkedException("Car not available in slot");
     }
 
     public boolean isCarColor(CarColor carColor) {
