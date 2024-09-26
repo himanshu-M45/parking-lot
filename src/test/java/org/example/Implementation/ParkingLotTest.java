@@ -118,7 +118,7 @@ class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(123, CarColor.RED);
 
-        assertThrows(NullPointerException.class, () -> parkingLot.getCarParkedInfoByRegNo(car.registrationNumber));
+        assertThrows(CarNotParkedException.class, () -> parkingLot.getCarParkedInfoByRegNo(car.registrationNumber));
     }
 
     // ------------------------------- unpark car tests -------------------------------

@@ -42,4 +42,11 @@ public class Slot {
         this.car = null;
         return carToUnpark;
     }
+
+    public Ticket getTicketIfCarMatches(int registrationNumber) {
+        if (this.car != null && this.car.registrationNumber == registrationNumber) {
+            return new Ticket(this.car.registrationNumber, this.slotNumber);
+        }
+        return null;
+    }
 }

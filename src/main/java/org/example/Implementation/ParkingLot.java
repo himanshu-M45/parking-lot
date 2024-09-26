@@ -1,10 +1,7 @@
 package org.example.Implementation;
 
 import org.example.Enum.CarColor;
-import org.example.Exceptions.CarAlreadyParkedException;
-import org.example.Exceptions.InvalidTicketException;
-import org.example.Exceptions.InvalidValueException;
-import org.example.Exceptions.ParkingLotIsFullException;
+import org.example.Exceptions.*;
 
 import java.util.ArrayList;
 
@@ -23,9 +20,7 @@ public class ParkingLot {
     }
 
     public Ticket park(Car car) {
-        if (car.isCarParked) {
-            throw new CarAlreadyParkedException("Car already parked");
-        }
+        if (car.isCarParked) throw new CarAlreadyParkedException("Car already parked");
         for (Slot slot : slots) {
             if (!slot.isOccupied()) {
                 Ticket ticket = slot.park(car);
@@ -48,11 +43,12 @@ public class ParkingLot {
 
     public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
         for (Slot slot : slots) {
-            if (slot.isOccupied() && slot.getCar().registrationNumber == registrationNumber) {
-                return new Ticket(slot.getCar().registrationNumber, slot.getSlotNumber());
+            Ticket ticket = slot.getTicketIfCarMatches(registrationNumber);
+            if (ticket != null) {
+                return ticket;
             }
         }
-        throw new NullPointerException("Car not found in parking lot");
+        throw new CarNotParkedException("Car not found in parking lot");
     }
 
     public Car unpark(Ticket carTicket) {

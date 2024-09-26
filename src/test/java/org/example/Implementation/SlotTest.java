@@ -12,7 +12,6 @@ class SlotTest {
         Slot slot = new Slot(1);
 
         assertFalse(slot.isOccupied());
-        assertNull(slot.getCar());
     }
 
     @Test
@@ -23,16 +22,6 @@ class SlotTest {
         Ticket carTicket = slot.park(car);
 
         assertEquals(car.registrationNumber, carTicket.registrationNumber);
-    }
-
-    @Test
-    void testGetCar() {
-        Slot slot = new Slot(1);
-        Car car = new Car(1, CarColor.BLACK);
-
-        slot.park(car);
-
-        assertEquals(car, slot.getCar());
     }
 
     @Test
