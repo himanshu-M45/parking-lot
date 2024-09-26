@@ -34,7 +34,7 @@ public class ParkingLot {
     public int getCountOfCarsByColor(CarColor carColor) {
         int count = 0;
         for (Slot slot : slots) {
-            if (slot.isOccupied() && slot.getCar().color == carColor) {
+            if (slot.isOccupied() && slot.isCarColor(carColor)) {
                 count++;
             }
         }

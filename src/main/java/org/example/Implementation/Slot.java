@@ -1,5 +1,6 @@
 package org.example.Implementation;
 
+import org.example.Enum.CarColor;
 import org.example.Exceptions.CarAlreadyParkedException;
 import org.example.Exceptions.InvalidTicketException;
 
@@ -14,14 +15,6 @@ public class Slot {
 
     public boolean isOccupied() {
         return car != null;
-    }
-
-    public int getSlotNumber() {
-        return slotNumber;
-    }
-
-    public Car getCar() {
-        return car;
     }
 
     public Ticket park(Car car) {
@@ -48,5 +41,9 @@ public class Slot {
             return new Ticket(this.car.registrationNumber, this.slotNumber);
         }
         return null;
+    }
+
+    public boolean isCarColor(CarColor carColor) {
+        return this.car != null && this.car.color == carColor;
     }
 }
