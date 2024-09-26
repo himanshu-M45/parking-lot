@@ -6,12 +6,12 @@ import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
 
 public class Slot {
-    private final int slotNumber;
     private Car car;
+    private Ticket ticket;
 
-    public Slot(int slotNumber) {
-        this.slotNumber = slotNumber;
+    public Slot() {
         this.car = null;
+        this.ticket = null;
     }
 
     public boolean isOccupied() {
@@ -22,29 +22,31 @@ public class Slot {
         if (this.car != null) {
             throw new CarAlreadyParkedException("Slot is already occupied");
         }
+        this.ticket = new Ticket();
         this.car = car;
-        car.isCarParked = true;
-        return new Ticket(car.registrationNumber, this.slotNumber);
+        this.car.isParked = true;
+        return ticket;
     }
 
-    public Car unpark() {
-        if (car == null) {
-            throw new InvalidTicketException("Invalid ticket");
+    public Car unpark(Ticket ticket) {
+        if (car != null && this.ticket != null && this.ticket.validateTicket(ticket)) {
+            Car car = this.car;
+            this.car.isParked = false;
+            this.car = null;
+            this.ticket = null;
+            return car;
         }
-        Car carToUnpark = this.car;
-        this.car.isCarParked = false;
-        this.car = null;
-        return carToUnpark;
+        throw new InvalidTicketException("Invalid ticket");
     }
 
     public Ticket getTicketIfCarMatches(int registrationNumber) {
-        if (this.car != null && this.car.registrationNumber == registrationNumber) {
-            return new Ticket(this.car.registrationNumber, this.slotNumber);
+        if (this.car != null && this.car.isCarIdentical(registrationNumber)) {
+            return this.ticket;
         }
         throw new CarNotParkedException("Car not available in slot");
     }
 
     public boolean isCarColor(CarColor carColor) {
-        return this.car != null && this.car.color == carColor;
+        return this.car != null && this.car.isIdenticalColor(carColor);
     }
 }

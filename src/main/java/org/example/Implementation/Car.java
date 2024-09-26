@@ -4,9 +4,9 @@ import org.example.Enum.CarColor;
 import org.example.Exceptions.InvalidValueException;
 
 public class Car {
-    public int registrationNumber;
-    public CarColor color;
-    public boolean isCarParked = false;
+    private final int registrationNumber;
+    private final CarColor color;
+    public boolean isParked = false;
 
     public Car(int registrationNumber, CarColor color) {
         if (registrationNumber <= 0) {
@@ -16,7 +16,11 @@ public class Car {
         this.color = color;
     }
 
-    public CarColor getColor() {
-        return null;
+    public boolean isCarIdentical(int registrationNumber) {
+        return this.registrationNumber == registrationNumber;
+    }
+
+    public boolean isIdenticalColor (CarColor color) {
+        return this.color == color;
     }
 }

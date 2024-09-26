@@ -15,12 +15,12 @@ public class ParkingLot {
         }
         this.slots = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
-            slots.add(new Slot(i)); // Initialize all slots as empty
+            slots.add(new Slot()); // Initialize all slots as empty
         }
     }
 
     public Ticket park(Car car) {
-        if (car.isCarParked) throw new CarAlreadyParkedException("Car already parked");
+        if (car.isParked) throw new CarAlreadyParkedException("Car already parked");
         for (Slot slot : slots) {
             if (!slot.isOccupied()) {
                 Ticket ticket = slot.park(car);
@@ -56,11 +56,14 @@ public class ParkingLot {
     }
 
     public Car unpark(Ticket carTicket) {
-        Slot slot = this.slots.get(carTicket.slotNumber);
-        if (slot.isOccupied()) {
-            Car car = slot.unpark();
-            if (this.isFull) this.isFull = false;
-            return car;
+        for (Slot slot : slots) {
+            try {
+                Car car = slot.unpark(carTicket);
+                if (this.isFull) this.isFull = false;
+                return car;
+            } catch (InvalidTicketException e) {
+                // Continue searching in the next slot
+            }
         }
         throw new InvalidTicketException("Invalid ticket");
     }

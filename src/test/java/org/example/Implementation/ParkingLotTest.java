@@ -106,11 +106,11 @@ class ParkingLotTest {
         Car thirdCar = new Car(345, CarColor.GREEN);
 
         parkingLot.park(firstCar);
-        parkingLot.park(secondCar);
+        Ticket secondCarTicket = parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
-        Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(secondCar.registrationNumber);
+        Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(234);
 
-        assertEquals(secondCar.registrationNumber, expectedTicket.registrationNumber);
+        assertEquals(secondCarTicket, expectedTicket);
     }
 
     @Test
@@ -118,7 +118,7 @@ class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(123, CarColor.RED);
 
-        assertThrows(CarNotParkedException.class, () -> parkingLot.getCarParkedInfoByRegNo(car.registrationNumber));
+        assertThrows(CarNotParkedException.class, () -> parkingLot.getCarParkedInfoByRegNo(123));
     }
 
     // ------------------------------- unpark car tests -------------------------------
@@ -160,7 +160,7 @@ class ParkingLotTest {
 
         Car car = new Car(1, CarColor.YELLOW);
 
-        Ticket dummyTicket = new Ticket(car.registrationNumber, 5);
+        Ticket dummyTicket = new Ticket();
 
         assertThrows(InvalidTicketException.class, () -> parkingLot.unpark(dummyTicket));
     }
@@ -175,20 +175,5 @@ class ParkingLotTest {
         assertEquals(2, mockParkingLot.getCountOfCarsByColor(CarColor.BLUE));
 
         verify(mockParkingLot).getCountOfCarsByColor(CarColor.BLUE);
-    }
-
-    @Test
-    void testMockCarAndParkIt() {
-        Car mockCar = mock(Car.class);
-
-        when(mockCar.getColor()).thenReturn(CarColor.RED);
-
-        ParkingLot parkingLot = new ParkingLot(2);
-
-        parkingLot.park(mockCar);
-
-        assertEquals(CarColor.RED, mockCar.getColor());
-
-        verify(mockCar, times(1)).getColor();
     }
 }

@@ -1,11 +1,16 @@
 package org.example.Implementation;
 
-public class Ticket {
-    public final Integer registrationNumber;
-    public final Integer slotNumber;
+import java.util.Objects;
+import java.util.UUID;
 
-    public Ticket(Integer registrationNumber, Integer slotNumber) {
-        this.registrationNumber = registrationNumber;
-        this.slotNumber = slotNumber;
+public class Ticket {
+    private final String ticketId;
+
+    public Ticket() {
+        this.ticketId = UUID.randomUUID().toString();
+    }
+
+    public boolean validateTicket (Ticket ticket) {
+        return Objects.equals(this.ticketId, ticket.ticketId);
     }
 }

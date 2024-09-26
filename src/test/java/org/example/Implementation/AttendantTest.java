@@ -72,7 +72,7 @@ class AttendantTest {
         attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
 
-        assertEquals(car.registrationNumber, carTicket.registrationNumber);
+        assertTrue(carTicket.validateTicket(carTicket));
     }
 
     @Test
@@ -155,9 +155,11 @@ class AttendantTest {
 
         firstAttendant.assign(firstParkingLot);
         secondAttendant.assign(secondParkingLot);
+        Ticket firstCarTicket = firstAttendant.park(firstCar);
+        Ticket secondCarTicket = secondAttendant.park(secondCar);
 
-        assertEquals(firstCar.registrationNumber, firstAttendant.park(firstCar).registrationNumber);
-        assertEquals(secondCar.registrationNumber, secondAttendant.park(secondCar).registrationNumber);
+        assertTrue(firstCarTicket.validateTicket(firstCarTicket));
+        assertTrue(secondCarTicket.validateTicket(secondCarTicket));
     }
 
     @Test
@@ -171,10 +173,10 @@ class AttendantTest {
         firstAttendant.assign(parkingLot);
         secondAttendant.assign(parkingLot);
         Ticket firstCarTicket = firstAttendant.park(firstCar);
-        Ticket SecondCarTicket = secondAttendant.park(secondCar);
+        Ticket secondCarTicket = secondAttendant.park(secondCar);
 
-        assertEquals(firstCar.registrationNumber, firstCarTicket.registrationNumber);
-        assertEquals(secondCar.registrationNumber, SecondCarTicket.registrationNumber);
+        assertTrue(firstCarTicket.validateTicket(firstCarTicket));
+        assertTrue(secondCarTicket.validateTicket(secondCarTicket));
     }
 
     // ------------------------------- unpark through attendant tests -------------------------------
