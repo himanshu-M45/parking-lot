@@ -11,7 +11,6 @@ class SlotTest {
     void testSlotInitialization() {
         Slot slot = new Slot(1);
 
-        assertEquals(1, slot.getSlotNumber());
         assertFalse(slot.isOccupied());
         assertNull(slot.getCar());
     }

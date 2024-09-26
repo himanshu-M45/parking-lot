@@ -64,13 +64,4 @@ public class ParkingLot {
         }
         throw new InvalidTicketException("Invalid ticket");
     }
-
-    public int getCarParkingSlotNumber(Car car) {
-        for (Slot slot : slots) {
-            if (slot.isOccupied() && slot.getCar().registrationNumber == car.registrationNumber) {
-                return slot.getSlotNumber();
-            }
-        }
-        throw new NullPointerException("Car not found in parking lot");
-    }
 }

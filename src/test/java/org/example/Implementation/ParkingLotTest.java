@@ -60,26 +60,6 @@ class ParkingLotTest {
         assertThrows(ParkingLotIsFullException.class, () -> parkingLot.park(thirdCar));
     }
 
-    // ------------------------------- park car at nearest spot tests -------------------------------
-    @Test
-    void testParkAtNearestSpot() {
-        ParkingLot parkingLot = new ParkingLot(3);
-        Car firstCar = new Car(123, CarColor.RED);
-        Car secondCar = new Car(234, CarColor.BLUE);
-        Car thirdCar = new Car(345, CarColor.GREEN);
-        Car fourthCar = new Car(456, CarColor.BLACK);
-
-        parkingLot.park(firstCar); // slot -> 0
-        Ticket secondCarTicket = parkingLot.park(secondCar); // slot -> 1
-        parkingLot.park(thirdCar); // slot -> 2
-        parkingLot.unpark(secondCarTicket); // unpark firstCar
-        parkingLot.park(fourthCar); // slot -> 0
-
-        int expectedSlot = 1;
-
-        assertEquals(expectedSlot, parkingLot.getCarParkingSlotNumber(fourthCar));
-    }
-
     // ------------------------------- count cars by color tests -------------------------------
     @Test
     void testGetCountOfBlueColorCars() {
