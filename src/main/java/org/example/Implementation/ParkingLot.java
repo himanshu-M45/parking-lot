@@ -43,12 +43,16 @@ public class ParkingLot {
 
     public Ticket getCarParkedInfoByRegNo(int registrationNumber) {
         for (Slot slot : slots) {
-            Ticket ticket = slot.getTicketIfCarMatches(registrationNumber);
-            if (ticket != null) {
-                return ticket;
+            try {
+                Ticket ticket = slot.getTicketIfCarMatches(registrationNumber);
+                if (ticket != null) {
+                    return ticket;
+                }
+            } catch (CarNotParkedException e) {
+                // Continue searching in the next slot
             }
         }
-        throw new CarNotParkedException("Car not found in parking lot");
+        throw new CarNotParkedException("Car not available in slot");
     }
 
     public Car unpark(Ticket carTicket) {

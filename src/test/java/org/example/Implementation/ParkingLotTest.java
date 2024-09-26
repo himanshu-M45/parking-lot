@@ -108,9 +108,9 @@ class ParkingLotTest {
         parkingLot.park(firstCar);
         parkingLot.park(secondCar);
         parkingLot.park(thirdCar);
-        Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(thirdCar.registrationNumber);
+        Ticket expectedTicket = parkingLot.getCarParkedInfoByRegNo(secondCar.registrationNumber);
 
-        assertEquals(thirdCar.registrationNumber, expectedTicket.registrationNumber);
+        assertEquals(secondCar.registrationNumber, expectedTicket.registrationNumber);
     }
 
     @Test

@@ -51,6 +51,17 @@ class AttendantTest {
 
     }
 
+    @Test
+    void testAssignSameParkingLotToMultipleAttendants() {
+        ParkingLot parkingLot = new ParkingLot(1);
+        Attendant firstAttendant = new Attendant();
+        Attendant secondAttendant = new Attendant();
+
+        firstAttendant.assign(parkingLot);
+
+        assertDoesNotThrow(() -> secondAttendant.assign(parkingLot));
+    }
+
     // ------------------------------- park through attendant tests -------------------------------
     @Test
     void testParkingCarThroughAttendant() {
@@ -149,6 +160,23 @@ class AttendantTest {
         assertEquals(secondCar.registrationNumber, secondAttendant.park(secondCar).registrationNumber);
     }
 
+    @Test
+    void testParkCarInSameParkingLotThroughDifferentAttendants() {
+        ParkingLot parkingLot = new ParkingLot(2);
+        Attendant firstAttendant = new Attendant();
+        Attendant secondAttendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+
+        firstAttendant.assign(parkingLot);
+        secondAttendant.assign(parkingLot);
+        Ticket firstCarTicket = firstAttendant.park(firstCar);
+        Ticket SecondCarTicket = secondAttendant.park(secondCar);
+
+        assertEquals(firstCar.registrationNumber, firstCarTicket.registrationNumber);
+        assertEquals(secondCar.registrationNumber, SecondCarTicket.registrationNumber);
+    }
+
     // ------------------------------- unpark through attendant tests -------------------------------
     @Test
     void testUnparkCarThroughAttendant() {
@@ -220,6 +248,23 @@ class AttendantTest {
 
         firstAttendant.assign(firstParkingLot);
         secondAttendant.assign(secondParkingLot);
+        Ticket firstCarTicket = firstAttendant.park(firstCar);
+        Ticket secondCarTicket = secondAttendant.park(secondCar);
+
+        assertEquals(firstCar, firstAttendant.unpark(firstCarTicket));
+        assertEquals(secondCar, secondAttendant.unpark(secondCarTicket));
+    }
+
+    @Test
+    void testUnparkCarsFromSameParkingLotThroughDifferentAttendants() {
+        ParkingLot parkingLot = new ParkingLot(2);
+        Attendant firstAttendant = new Attendant();
+        Attendant secondAttendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+
+        firstAttendant.assign(parkingLot);
+        secondAttendant.assign(parkingLot);
         Ticket firstCarTicket = firstAttendant.park(firstCar);
         Ticket secondCarTicket = secondAttendant.park(secondCar);
 
