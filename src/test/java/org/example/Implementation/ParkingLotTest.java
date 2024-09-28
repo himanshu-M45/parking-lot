@@ -9,46 +9,46 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingLotTest {
-    // ------------------------------- parking lot tests -------------------------------
+    // ------------------------------- parking lot Tests -------------------------------
     @Test
-    void testParkingLotWithZeroSlotsThrowsException() {
+    void TestParkingLotWithZeroSlotsThrowsException() {
         assertThrows(InvalidValueException.class, () -> new ParkingLot(0));
     }
 
     @Test
-    void testParkingLotWithNegativeSlotsThrowsException() {
+    void TestParkingLotWithNegativeSlotsThrowsException() {
         assertThrows(InvalidValueException.class, () -> new ParkingLot(-32));
     }
 
     @Test
-    void testNewParkingLotIsEmpty() {
+    void TestNewParkingLotIsEmpty() {
         ParkingLot parkingLot = new ParkingLot(1);
-        assertFalse(parkingLot.isFull);
+        assertFalse(parkingLot.isParkingLotFull());
     }
 
-    // ------------------------------- park car tests -------------------------------
+    // ------------------------------- park car Tests -------------------------------
     @Test
-    void testParkingLotWithOneSlotIsFullWhenCarParked() {
+    void TestParkingLotWithOneSlotIsFullWhenCarParked() {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(2, CarColor.BLUE);
 
         parkingLot.park(car);
 
-        assertTrue(parkingLot.isFull);
+        assertTrue(parkingLot.isParkingLotFull());
     }
 
     @Test
-    void testParkingLotWithTwoSlotsIsNotFullWhenOneCarParked() {
+    void TestParkingLotWithTwoSlotsIsNotFullWhenOneCarParked() {
         ParkingLot parkingLot = new ParkingLot(2);
         Car car = new Car(21, CarColor.RED);
 
         parkingLot.park(car);
 
-        assertFalse(parkingLot.isFull);
+        assertFalse(parkingLot.isParkingLotFull());
     }
 
     @Test
-    void testParkingLotWithThirdVehicleWhenAvailableSlotsAreTwo() {
+    void TestParkingLotWithThirdVehicleWhenAvailableSlotsAreTwo() {
         ParkingLot parkingLot = new ParkingLot(2);
         Car firstCar = new Car(212, CarColor.RED);
         Car secondCar = new Car(221, CarColor.BLUE);
@@ -60,9 +60,9 @@ class ParkingLotTest {
         assertThrows(ParkingLotIsFullException.class, () -> parkingLot.park(thirdCar));
     }
 
-    // ------------------------------- count cars by color tests -------------------------------
+    // ------------------------------- count cars by color Tests -------------------------------
     @Test
-    void testGetCountOfBlueColorCars() {
+    void TestGetCountOfBlueColorCars() {
         ParkingLot parkingLot = new ParkingLot(4);
         Car firstCar = new Car(123, CarColor.RED);
         Car secondCar = new Car(234, CarColor.BLUE);
@@ -80,7 +80,7 @@ class ParkingLotTest {
     }
 
     @Test
-    void testGetCountOfBlackColorCars() {
+    void TestGetCountOfBlackColorCars() {
         ParkingLot parkingLot = new ParkingLot(4);
         Car firstCar = new Car(123, CarColor.BLACK);
         Car secondCar = new Car(234, CarColor.BLUE);
@@ -99,7 +99,7 @@ class ParkingLotTest {
 
     // ------------------------------- check car availability by regNo. -------------------------------
     @Test
-    void testCheckTheGivenCarIsAvailableInParkingLot() {
+    void TestCheckTheGivenCarIsAvailableInParkingLot() {
         ParkingLot parkingLot = new ParkingLot(3);
         Car firstCar = new Car(123, CarColor.RED);
         Car secondCar = new Car(234, CarColor.BLUE);
@@ -114,16 +114,16 @@ class ParkingLotTest {
     }
 
     @Test
-    void testCheckTheGivenCarIsNotAvailableInParkingLot() {
+    void TestCheckTheGivenCarIsNotAvailableInParkingLot() {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(123, CarColor.RED);
 
         assertThrows(CarNotParkedException.class, () -> parkingLot.getCarParkedInfoByRegNo(123));
     }
 
-    // ------------------------------- unpark car tests -------------------------------
+    // ------------------------------- unpark car Tests -------------------------------
     @Test
-    void testUnparkCarFromParkingLot() {
+    void TestUnparkCarFromParkingLot() {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(123, CarColor.RED);
 
@@ -134,7 +134,7 @@ class ParkingLotTest {
     }
 
     @Test
-    void testCannotUnparkCarFromParkingLotWithDifferentTicket() {
+    void TestCannotUnparkCarFromParkingLotWithDifferentTicket() {
         ParkingLot parkingLot = new ParkingLot(2);
         Car car = new Car(234, CarColor.BLUE);
 
@@ -145,7 +145,7 @@ class ParkingLotTest {
     }
 
     @Test
-    void testCannotParkSameCarTwice() {
+    void TestCannotParkSameCarTwice() {
         ParkingLot parkingLot = new ParkingLot(3);
         Car car = new Car(123, CarColor.RED);
 
@@ -155,7 +155,7 @@ class ParkingLotTest {
     }
 
     @Test
-    void testCannotUnparkUnavailableCarFromParkingLot() {
+    void TestCannotUnparkUnavailableCarFromParkingLot() {
         ParkingLot parkingLot = new ParkingLot(12);
 
         Car car = new Car(1, CarColor.YELLOW);
@@ -165,9 +165,9 @@ class ParkingLotTest {
         assertThrows(InvalidTicketException.class, () -> parkingLot.unpark(dummyTicket));
     }
 
-    // ------------------------------- mock tests -------------------------------
+    // ------------------------------- mock Tests -------------------------------
     @Test
-    void testMockParkingLot() {
+    void TestMockParkingLot() {
         ParkingLot mockParkingLot = mock(ParkingLot.class);
 
         when(mockParkingLot.getCountOfCarsByColor(CarColor.BLUE)).thenReturn(2);

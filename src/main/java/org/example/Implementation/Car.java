@@ -6,7 +6,7 @@ import org.example.Exceptions.InvalidValueException;
 public class Car {
     private final int registrationNumber;
     private final CarColor color;
-    public boolean isParked = false;
+    private boolean isParked = false;
 
     public Car(int registrationNumber, CarColor color) {
         if (registrationNumber <= 0) {
@@ -22,5 +22,13 @@ public class Car {
 
     public boolean isIdenticalColor (CarColor color) {
         return this.color == color;
+    }
+
+    public boolean isCarParked() {
+        return isParked;
+    }
+
+    public void setCarParked(boolean isParked) {
+        this.isParked = isParked;
     }
 }

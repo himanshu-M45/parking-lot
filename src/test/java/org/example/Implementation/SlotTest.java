@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SlotTest {
     @Test
-    void testSlotInitialization() {
+    void TestSlotInitialization() {
         Slot slot = new Slot();
 
         assertFalse(slot.isOccupied());
     }
 
     @Test
-    void testParkCar() {
+    void TestParkCar() {
         Slot slot = new Slot();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -26,7 +26,7 @@ class SlotTest {
     }
 
     @Test
-    void testUnparkCar() {
+    void TestUnparkCar() {
         Slot slot = new Slot();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -37,7 +37,7 @@ class SlotTest {
     }
 
     @Test
-    void testUnparkAlreadyUnparkedCar() {
+    void TestUnparkAlreadyUnparkedCar() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
@@ -50,7 +50,7 @@ class SlotTest {
     }
 
     @Test
-    void testGetTicketIfCarMatches() {
+    void TestGetTicketIfCarMatches() {
         Slot slot = new Slot();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -61,7 +61,7 @@ class SlotTest {
     }
 
     @Test
-    void testGetTicketIfCarMatchesIfCarIsNotAvailable() {
+    void TestCarNotFoundExceptionIfCarIsNotAvailable() {
         Slot slot = new Slot();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -71,7 +71,7 @@ class SlotTest {
     }
 
     @Test
-    void testCheckBlackColorCarIsParkedInSlot() {
+    void TestCheckBlackColorCarIsParkedInSlot() {
         Slot slot = new Slot();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -81,7 +81,7 @@ class SlotTest {
     }
 
     @Test
-    void testCheckBlackColorCarIsNotParkedInSlot() {
+    void TestCheckBlackColorCarIsNotParkedInSlot() {
         Slot slot = new Slot();
 
         assertFalse(slot.isCarColor(CarColor.BLACK));

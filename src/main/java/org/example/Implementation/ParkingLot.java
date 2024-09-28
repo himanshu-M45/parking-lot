@@ -6,7 +6,7 @@ import org.example.Exceptions.*;
 import java.util.ArrayList;
 
 public class ParkingLot {
-    public boolean isFull = false;
+    private boolean isFull = false;
     private final ArrayList<Slot> slots;
 
     public ParkingLot(int numberOfSlots) {
@@ -20,7 +20,7 @@ public class ParkingLot {
     }
 
     public Ticket park(Car car) {
-        if (car.isParked) throw new CarAlreadyParkedException("Car already parked");
+        if (car.isCarParked()) throw new CarAlreadyParkedException("Car already parked");
         for (Slot slot : slots) {
             if (!slot.isOccupied()) {
                 Ticket ticket = slot.park(car);
@@ -66,5 +66,9 @@ public class ParkingLot {
             }
         }
         throw new InvalidTicketException("Invalid ticket");
+    }
+
+    public boolean isParkingLotFull() {
+        return this.isFull;
     }
 }

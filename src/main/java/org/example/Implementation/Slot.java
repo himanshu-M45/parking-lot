@@ -24,14 +24,14 @@ public class Slot {
         }
         this.ticket = new Ticket();
         this.car = car;
-        this.car.isParked = true;
+        this.car.setCarParked(true);
         return ticket;
     }
 
     public Car unpark(Ticket ticket) {
         if (car != null && this.ticket != null && this.ticket.validateTicket(ticket)) {
             Car car = this.car;
-            this.car.isParked = false;
+            this.car.setCarParked(false);
             this.car = null;
             this.ticket = null;
             return car;

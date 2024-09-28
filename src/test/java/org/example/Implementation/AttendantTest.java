@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AttendantTest {
-    // ------------------------------- attendant tests -------------------------------
+    // ------------------------------- attendant Tests -------------------------------
     @Test
-    void testAssignParkingLotToAttendant() {
+    void TestAssignParkingLotToAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
 
@@ -20,7 +20,7 @@ class AttendantTest {
     }
 
     @Test
-    void testAssignTwoParkingLotToAttendant() {
+    void TestAssignTwoParkingLotToAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         ParkingLot anotherParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -31,7 +31,7 @@ class AttendantTest {
     }
 
     @Test
-    void testCannotAssignSameParkingLotTwice() {
+    void TestCannotAssignSameParkingLotTwice() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
 
@@ -41,18 +41,7 @@ class AttendantTest {
     }
 
     @Test
-    void testAssigningSameParkingLotTwice() {
-        ParkingLot firstparkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-
-        attendant.assign(firstparkingLot);
-
-        assertThrows(ParkingLotAleradyAssignedException.class, () -> attendant.assign(firstparkingLot));
-
-    }
-
-    @Test
-    void testAssignSameParkingLotToMultipleAttendants() {
+    void TestAssignSameParkingLotToMultipleAttendants() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant firstAttendant = new Attendant();
         Attendant secondAttendant = new Attendant();
@@ -62,9 +51,9 @@ class AttendantTest {
         assertDoesNotThrow(() -> secondAttendant.assign(parkingLot));
     }
 
-    // ------------------------------- park through attendant tests -------------------------------
+    // ------------------------------- park through attendant Tests -------------------------------
     @Test
-    void testParkingCarThroughAttendant() {
+    void TestParkingCarThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
@@ -76,7 +65,7 @@ class AttendantTest {
     }
 
     @Test
-    void testTryToParkCarWhenParkingLotIsFull() {
+    void TestTryToParkCarWhenParkingLotIsFull() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
@@ -89,7 +78,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkSameCarTwice() {
+    void TestParkSameCarTwice() {
         ParkingLot parkingLot = new ParkingLot(2);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
@@ -101,7 +90,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkMultipleCarsInParkingLotThroughAttendant() {
+    void TestParkMultipleCarsInParkingLotThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(2);
         Attendant attendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
@@ -114,7 +103,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkCarInMultipleParkingLotsThroughSameAttendant() {
+    void TestParkCarInMultipleParkingLotsThroughSameAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -131,7 +120,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkSameCarInDifferentParkingLotsOfSameAttendant() {
+    void TestParkSameCarInDifferentParkingLotsOfSameAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -145,7 +134,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkCarInDifferentParkingLotThroughDifferentAttendants() {
+    void TestParkCarInDifferentParkingLotThroughDifferentAttendants() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         Attendant firstAttendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
@@ -163,7 +152,7 @@ class AttendantTest {
     }
 
     @Test
-    void testParkCarInSameParkingLotThroughDifferentAttendants() {
+    void TestParkCarInSameParkingLotThroughDifferentAttendants() {
         ParkingLot parkingLot = new ParkingLot(2);
         Attendant firstAttendant = new Attendant();
         Attendant secondAttendant = new Attendant();
@@ -179,9 +168,9 @@ class AttendantTest {
         assertTrue(secondCarTicket.validateTicket(secondCarTicket));
     }
 
-    // ------------------------------- unpark through attendant tests -------------------------------
+    // ------------------------------- unpark through attendant Tests -------------------------------
     @Test
-    void testUnparkCarThroughAttendant() {
+    void TestUnparkCarThroughAttendant() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
@@ -193,7 +182,7 @@ class AttendantTest {
     }
 
     @Test
-    void testUnparkCarFromMultipleParkingLots() {
+    void TestUnparkCarFromMultipleParkingLots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -210,7 +199,7 @@ class AttendantTest {
     }
 
     @Test
-    void testUnparkAlreadyUnparkedCar() {
+    void TestUnparkAlreadyUnparkedCar() {
         ParkingLot parkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
@@ -223,7 +212,7 @@ class AttendantTest {
     }
 
     @Test
-    void testUnparkMultipleCarsFromMultipleParkingLotsOfSameAttendant() {
+    void TestUnparkMultipleCarsFromMultipleParkingLotsOfSameAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant attendant = new Attendant();
@@ -240,7 +229,7 @@ class AttendantTest {
     }
 
     @Test
-    void testUnparkMultipleCarsFromMultipleParkingLotsOfDifferentAttendant() {
+    void TestUnparkMultipleCarsFromMultipleParkingLotsOfDifferentAttendant() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         Attendant firstAttendant = new Attendant();
@@ -258,7 +247,7 @@ class AttendantTest {
     }
 
     @Test
-    void testUnparkCarsFromSameParkingLotThroughDifferentAttendants() {
+    void TestUnparkCarsFromSameParkingLotThroughDifferentAttendants() {
         ParkingLot parkingLot = new ParkingLot(2);
         Attendant firstAttendant = new Attendant();
         Attendant secondAttendant = new Attendant();

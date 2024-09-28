@@ -20,7 +20,7 @@ public class Attendant {
 
     public Ticket park(Car car) {
         for (ParkingLot parkingLot : assignedParkingLots) {
-            if (!parkingLot.isFull) {
+            if (!parkingLot.isParkingLotFull()) {
                 return parkingLot.park(car);
             }
         }
