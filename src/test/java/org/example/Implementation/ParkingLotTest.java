@@ -121,6 +121,16 @@ class ParkingLotTest {
         assertThrows(CarNotParkedException.class, () -> parkingLot.getCarParkedInfoByRegNo(123));
     }
 
+    @Test
+    void TestCannotParkSameCarTwice() {
+        ParkingLot parkingLot = new ParkingLot(3);
+        Car car = new Car(123, CarColor.RED);
+
+        parkingLot.park(car);
+
+        assertThrows(CarAlreadyParkedException.class, () -> parkingLot.park(car));
+    }
+
     // ------------------------------- unpark car Tests -------------------------------
     @Test
     void TestUnparkCarFromParkingLot() {
@@ -145,20 +155,8 @@ class ParkingLotTest {
     }
 
     @Test
-    void TestCannotParkSameCarTwice() {
-        ParkingLot parkingLot = new ParkingLot(3);
-        Car car = new Car(123, CarColor.RED);
-
-        parkingLot.park(car);
-
-        assertThrows(CarAlreadyParkedException.class, () -> parkingLot.park(car));
-    }
-
-    @Test
     void TestCannotUnparkUnavailableCarFromParkingLot() {
         ParkingLot parkingLot = new ParkingLot(12);
-
-        Car car = new Car(1, CarColor.YELLOW);
 
         Ticket dummyTicket = new Ticket();
 
