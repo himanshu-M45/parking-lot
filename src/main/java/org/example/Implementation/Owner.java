@@ -1,5 +1,6 @@
 package org.example.Implementation;
 
+import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.OwnerCannotAttendParkingLotException;
 import org.example.Exceptions.ParkingLotIsFullException;
 
@@ -34,5 +35,18 @@ public class Owner {
             }
         }
         throw new OwnerCannotAttendParkingLotException("Owner cannot attend any parking lot");
+    }
+
+    public Car unpark(Ticket ticket) {
+        for (ParkingLot parkingLot : ownedParkingLots.keySet()) {
+            if (ownedParkingLots.get(parkingLot)) {
+                try {
+                    return parkingLot.unpark(ticket);
+                } catch (InvalidTicketException e) {
+                    // Continue searching in the next parking lot
+                }
+            }
+        }
+        throw new InvalidTicketException("Owner cannot attend any parking lot");
     }
 }
