@@ -43,4 +43,15 @@ class PolicemanTest {
 
         assertTrue(policeman.getParkingLotStatus(parkingLot));
     }
+
+    @Test
+    void TestParkingLotIsNotFullThroughPoliceMan() {
+        Policeman policeman = Policeman.getInstance();
+        ParkingLot parkingLot = new ParkingLot(2);
+        Car car = new Car(1, CarColor.BLACK);
+
+        parkingLot.park(car);
+
+        assertFalse(policeman.getParkingLotStatus(parkingLot));
+    }
 }
