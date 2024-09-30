@@ -28,6 +28,16 @@ class ParkingLotTest {
 
     // ------------------------------- park car Tests -------------------------------
     @Test
+    void TestParkCar() {
+        ParkingLot parkingLot = new ParkingLot(1);
+        Car car = new Car(1, CarColor.RED);
+
+        Ticket ticket = parkingLot.park(car);
+
+        assertNotNull(ticket);
+    }
+
+    @Test
     void TestParkingLotWithOneSlotIsFullWhenCarParked() {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(2, CarColor.BLUE);

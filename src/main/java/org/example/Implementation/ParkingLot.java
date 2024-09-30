@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ParkingLot {
     private boolean isFull = false;
     private final ArrayList<Slot> slots;
+    private final Policeman policeman;
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
@@ -17,6 +18,8 @@ public class ParkingLot {
         for (int i = 0; i < numberOfSlots; i++) {
             slots.add(new Slot()); // Initialize all slots as empty
         }
+        this.policeman = Policeman.getInstance();
+        this.policeman.addParkingLot(this);
     }
 
     public Ticket park(Car car) {
@@ -24,7 +27,10 @@ public class ParkingLot {
         for (Slot slot : slots) {
             if (!slot.isOccupied()) {
                 Ticket ticket = slot.park(car);
-                this.isFull = slots.stream().allMatch(Slot::isOccupied);
+                if (slots.stream().allMatch(Slot::isOccupied)) {
+                    this.isFull = true;
+                    policeman.updateParkingLotStatus(this);
+                }
                 return ticket;
             }
         }
@@ -59,7 +65,10 @@ public class ParkingLot {
         for (Slot slot : slots) {
             try {
                 Car car = slot.unpark(carTicket);
-                if (this.isFull) this.isFull = false;
+                if (this.isFull) {
+                    this.isFull = false;
+                    policeman.updateParkingLotStatus(this);
+                }
                 return car;
             } catch (InvalidTicketException e) {
                 // Continue searching in the next slot

@@ -262,4 +262,81 @@ class AttendantTest {
         assertEquals(firstCar, firstAttendant.unpark(firstCarTicket));
         assertEquals(secondCar, secondAttendant.unpark(secondCarTicket));
     }
+
+    // ------------------------------- distributed parking Tests -------------------------------
+    @Test
+    void TestDistributedParking() {
+        ParkingLot firstParkingLot = new ParkingLot(2);
+        ParkingLot secondParkingLot = new ParkingLot(2);
+        ParkingLot thirdParkingLot = new ParkingLot(2);
+        Attendant attendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
+        Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
+        Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
+        Car fourthCar = new Car(4, CarColor.BLUE); // firstParkingLot
+
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
+        attendant.assign(thirdParkingLot);
+        attendant.park(firstCar);
+        attendant.park(secondCar);
+        attendant.park(thirdCar);
+        attendant.park(fourthCar);
+
+        assertAll(
+                () -> assertTrue(firstParkingLot.isParkingLotFull()),
+                () -> assertFalse(secondParkingLot.isParkingLotFull()),
+                () -> assertFalse(thirdParkingLot.isParkingLotFull())
+        );
+    }
+
+    @Test
+    void TestDistributedParkingWhenAllParkingLotsAreFull() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot thirdParkingLot = new ParkingLot(1);
+        Attendant attendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
+        Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
+        Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
+        Car fourthCar = new Car(4, CarColor.BLUE); // firstParkingLot
+
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
+        attendant.assign(thirdParkingLot);
+        attendant.park(firstCar);
+        attendant.park(secondCar);
+        attendant.park(thirdCar);
+
+        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(fourthCar));
+    }
+
+    @Test
+    void TestDistributedParkingWhenAllParkingLotsAreFullAndUnparkCarAndParkAgainInSameParkingLot() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot thirdParkingLot = new ParkingLot(1);
+        Attendant attendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
+        Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
+        Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
+        Car fourthCar = new Car(4, CarColor.BLUE);
+
+        attendant.assign(firstParkingLot);
+        attendant.assign(secondParkingLot);
+        attendant.assign(thirdParkingLot);
+        Ticket firstCarTicket = attendant.park(firstCar);
+        Ticket secondCarTicket = attendant.park(secondCar);
+        Ticket thirdCarTicket = attendant.park(thirdCar);
+
+        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(fourthCar));
+
+        assertAll(
+                () -> assertEquals(firstCar, attendant.unpark(firstCarTicket)),
+                () -> assertEquals(secondCar, attendant.unpark(secondCarTicket)),
+                () -> assertEquals(thirdCar, attendant.unpark(thirdCarTicket))
+        );
+
+        assertDoesNotThrow(() -> attendant.park(fourthCar));
+    }
 }
