@@ -9,7 +9,7 @@ import java.util.Objects;
 public class ParkingLot {
     private boolean isFull = false;
     private final ArrayList<Slot> slots;
-    private final Policeman policeman;
+    private Notifiable notifiable;
     private String owner;
 
     public ParkingLot(int numberOfSlots) {
@@ -20,8 +20,6 @@ public class ParkingLot {
         for (int i = 0; i < numberOfSlots; i++) {
             slots.add(new Slot()); // Initialize all slots as empty
         }
-        this.policeman = Policeman.getInstance();
-        this.policeman.addParkingLot(this);
     }
 
     public Ticket park(Car car) {
@@ -31,7 +29,7 @@ public class ParkingLot {
                 Ticket ticket = slot.park(car);
                 if (slots.stream().allMatch(Slot::isOccupied)) {
                     this.isFull = true;
-                    policeman.updateParkingLotStatus(this);
+                    notifiable.updateStatus(this);
                 }
                 return ticket;
             }
@@ -69,7 +67,7 @@ public class ParkingLot {
                 Car car = slot.unpark(carTicket);
                 if (this.isFull) {
                     this.isFull = false;
-                    policeman.updateParkingLotStatus(this);
+                    notifiable.updateStatus(this);
                 }
                 return car;
             } catch (InvalidTicketException e) {
@@ -93,5 +91,10 @@ public class ParkingLot {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public void setNotifiable(Notifiable notifiable) {
+        this.notifiable = notifiable;
+        this.notifiable.updateStatus(this);
     }
 }

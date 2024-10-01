@@ -13,9 +13,22 @@ class PolicemanTest {
     }
 
     @Test
-    void TestAddParkingLotToPolicemanWithInitialStatus() {
-        Policeman policeman = Policeman.getInstance();
+    void TestPolicemanUpdatesStatusWhenParkingLotIsFull() {
+        Policeman policeman = new Policeman();
         ParkingLot parkingLot = new ParkingLot(1);
+        parkingLot.setNotifiable(policeman);
+        Car car = new Car(1, CarColor.BLACK);
+
+        parkingLot.park(car);
+
+        assertTrue(policeman.getParkingLotStatus(parkingLot));
+    }
+
+    @Test
+    void TestAddParkingLotToPolicemanWithInitialStatus() {
+        Policeman policeman = new Policeman();
+        ParkingLot parkingLot = new ParkingLot(1);
+        parkingLot.setNotifiable(policeman);
         assertFalse(policeman.getParkingLotStatus(parkingLot));
     }
 
@@ -23,15 +36,19 @@ class PolicemanTest {
     void Test(){
         Policeman policeman = new Policeman();
         ParkingLot parkingLot = new ParkingLot(1);
+        parkingLot.setNotifiable(policeman);
         assertFalse(policeman.getParkingLotStatus(parkingLot));
     }
 
     @Test
     void TestAddMultipleParkingLotsToPoliceman() {
-        Policeman policeman = Policeman.getInstance();
+        Policeman policeman = new Policeman();
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingLot thirdParkingLot = new ParkingLot(1);
+        firstParkingLot.setNotifiable(policeman);
+        secondParkingLot.setNotifiable(policeman);
+        thirdParkingLot.setNotifiable(policeman);
 
         assertAll(
                 () -> assertFalse(policeman.getParkingLotStatus(firstParkingLot)),
@@ -42,8 +59,9 @@ class PolicemanTest {
 
     @Test
     void TestParkingLotIsFullThroughPoliceMan() {
-        Policeman policeman = Policeman.getInstance();
+        Policeman policeman = new Policeman();
         ParkingLot parkingLot = new ParkingLot(1);
+        parkingLot.setNotifiable(policeman);
         Car car = new Car(1, CarColor.BLACK);
 
         parkingLot.park(car);
@@ -53,8 +71,9 @@ class PolicemanTest {
 
     @Test
     void TestParkingLotIsNotFullThroughPoliceMan() {
-        Policeman policeman = Policeman.getInstance();
+        Policeman policeman = new Policeman();
         ParkingLot parkingLot = new ParkingLot(2);
+        parkingLot.setNotifiable(policeman);
         Car car = new Car(1, CarColor.BLACK);
 
         parkingLot.park(car);
