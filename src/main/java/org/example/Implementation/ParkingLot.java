@@ -4,11 +4,13 @@ import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ParkingLot {
     private boolean isFull = false;
     private final ArrayList<Slot> slots;
     private final Policeman policeman;
+    private String owner = "";
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
@@ -79,5 +81,17 @@ public class ParkingLot {
 
     public boolean isParkingLotFull() {
         return this.isFull;
+    }
+
+    public boolean isOwned() {
+        return !Objects.equals(this.owner, "");
+    }
+
+    public boolean identifyOwner(String owner) {
+        return Objects.equals(this.owner, owner);
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
