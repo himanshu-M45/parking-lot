@@ -20,6 +20,13 @@ class PolicemanTest {
     }
 
     @Test
+    void Test(){
+        Policeman policeman = new Policeman();
+        ParkingLot parkingLot = new ParkingLot(1);
+        assertFalse(policeman.getParkingLotStatus(parkingLot));
+    }
+
+    @Test
     void TestAddMultipleParkingLotsToPoliceman() {
         Policeman policeman = Policeman.getInstance();
         ParkingLot firstParkingLot = new ParkingLot(1);

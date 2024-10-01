@@ -10,7 +10,7 @@ public class ParkingLot {
     private boolean isFull = false;
     private final ArrayList<Slot> slots;
     private final Policeman policeman;
-    private String owner = "";
+    private String owner;
 
     public ParkingLot(int numberOfSlots) {
         if (numberOfSlots <= 0) {
@@ -84,7 +84,7 @@ public class ParkingLot {
     }
 
     public boolean isOwned() {
-        return !Objects.equals(this.owner, "");
+        return this.owner != null;
     }
 
     public boolean identifyOwner(String owner) {
