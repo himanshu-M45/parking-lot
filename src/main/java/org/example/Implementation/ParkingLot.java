@@ -29,7 +29,7 @@ public class ParkingLot {
                 Ticket ticket = slot.park(car);
                 if (slots.stream().allMatch(Slot::isOccupied)) {
                     this.isFull = true;
-                    notifiable.updateStatus(this);
+                    if (this.notifiable != null) notifiable.updateStatus(this);
                 }
                 return ticket;
             }
@@ -67,7 +67,7 @@ public class ParkingLot {
                 Car car = slot.unpark(carTicket);
                 if (this.isFull) {
                     this.isFull = false;
-                    notifiable.updateStatus(this);
+                    if (this.notifiable != null) notifiable.updateStatus(this);
                 }
                 return car;
             } catch (InvalidTicketException e) {

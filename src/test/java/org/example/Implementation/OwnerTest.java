@@ -1,10 +1,7 @@
 package org.example.Implementation;
 
 import org.example.Enum.CarColor;
-import org.example.Exceptions.CarAlreadyParkedException;
-import org.example.Exceptions.InvalidTicketException;
-import org.example.Exceptions.OwnerDoesNotOwnParkingLotException;
-import org.example.Exceptions.ParkingLotAlreadyOwnedException;
+import org.example.Exceptions.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,21 +25,6 @@ class OwnerTest {
         assertDoesNotThrow(() -> owner.createParkingLot(1));
         assertDoesNotThrow(() -> owner.createParkingLot(2));
         assertDoesNotThrow(() -> owner.createParkingLot(3));
-    }
-
-    @Test
-    void TestOwnerCannotAttendParkingLot() {
-        Owner owner = new Owner();
-        ParkingLot parkingLot = owner.createParkingLot(1);
-        assertFalse(owner.canOwnerAttendParkingLot(parkingLot));
-    }
-
-    @Test
-    void TestOwnerCanOwnerAttendParkingLotParkingLot() {
-        Owner owner = new Owner();
-        ParkingLot parkingLot = owner.createParkingLot(1);
-        owner.assign(parkingLot);
-        assertTrue(owner.canOwnerAttendParkingLot(parkingLot));
     }
 
     @Test
@@ -98,6 +80,15 @@ class OwnerTest {
         );
     }
 
+    @Test
+    void TestAssignSmartAttendantToOwnedParkingLot() {
+        Owner owner = new Owner();
+        ParkingLot parkingLot = owner.createParkingLot(1);
+        SmartAttendant smartAttendant = new SmartAttendant();
+
+        assertDoesNotThrow(() -> owner.assignAttendant(parkingLot, smartAttendant));
+    }
+
     // ---------------------------- park tests ----------------------------
     @Test
     void TestParkCarThroughOwner() {
@@ -139,6 +130,72 @@ class OwnerTest {
 
         assertThrows(CarAlreadyParkedException.class, () -> owner.park(car));
     }
+
+    @Test
+    void TestParkCarThroughOwnerWithOneParkingLotNotAssignedThrowsException() {
+        Owner owner = new Owner();
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        ParkingLot thirdParkingLot = owner.createParkingLot(1);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.WHITE);
+        Car thirdCar = new Car(3, CarColor.RED);
+
+        owner.assign(firstParkingLot);
+        owner.assign(secondParkingLot);
+        Ticket firstCarTicket = owner.park(firstCar);
+        Ticket secondCarTicket = owner.park(secondCar);
+
+        assertAll(
+                () -> assertNotNull(firstCarTicket),
+                () -> assertNotNull(secondCarTicket),
+                () -> assertThrows(ParkingLotIsFullException.class, () -> owner.park(thirdCar))
+        );
+    }
+
+    @Test
+    void TestDefaultAttendantParkCarThroughOwner() {
+        Owner owner = new Owner();
+        ParkingLot firstParkingLot = owner.createParkingLot(2);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        Attendant attendant = new Attendant();
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.WHITE);
+
+        owner.assign(firstParkingLot);
+        owner.assign(secondParkingLot);
+        owner.assignAttendant(firstParkingLot, attendant);
+        owner.assignAttendant(secondParkingLot, attendant);
+        owner.park(firstCar);
+        owner.park(secondCar);
+
+        assertAll(
+                () -> assertTrue(firstParkingLot.isParkingLotFull()),
+                () -> assertFalse(secondParkingLot.isParkingLotFull())
+        );
+    }
+
+//    @Test
+//    void TestParkCarBySmartAttendantThroughOwner() {
+//        Owner owner = new Owner();
+//        ParkingLot firstParkingLot = owner.createParkingLot(2);
+//        ParkingLot secondParkingLot = owner.createParkingLot(1);
+//        Attendant smartAttendant = new SmartAttendant();
+//        Car firstCar = new Car(1, CarColor.BLACK);
+//        Car secondCar = new Car(2, CarColor.WHITE);
+//
+//        owner.assign(firstParkingLot);
+//        owner.assign(secondParkingLot);
+//        owner.assignAttendant(firstParkingLot, smartAttendant);
+//        owner.assignAttendant(secondParkingLot, smartAttendant);
+//        owner.park(firstCar);
+//        owner.park(secondCar);
+//
+//        assertAll(
+//                () -> assertFalse(firstParkingLot.isParkingLotFull()),
+//                () -> assertTrue(secondParkingLot.isParkingLotFull())
+//        );
+//    }
 
     // ---------------------------- unpark tests ----------------------------
     @Test
@@ -184,5 +241,55 @@ class OwnerTest {
         owner.unpark(ticket);
 
         assertThrows(InvalidTicketException.class, () -> owner.unpark(ticket));
+    }
+
+    // ---------------------------- notifiable tests ----------------------------
+    @Test
+    void TestOwnerNotifiableParkingLotIsFull() {
+        Owner owner = new Owner();
+        ParkingLot parkingLot = owner.createParkingLot(1);
+        Car car = new Car(1, CarColor.BLACK);
+
+        assertFalse(owner.getParkingLotStatus(parkingLot));
+
+        parkingLot.setNotifiable(owner);
+        owner.assign(parkingLot);
+        owner.park(car);
+
+        assertTrue(owner.getParkingLotStatus(parkingLot));
+    }
+
+    @Test
+    void TestOwnerNotifiableParkingLotIsNotFull() {
+        Owner owner = new Owner();
+        ParkingLot parkingLot = owner.createParkingLot(2);
+        Car car = new Car(1, CarColor.BLACK);
+
+        parkingLot.setNotifiable(owner);
+        owner.assign(parkingLot);
+        owner.park(car);
+
+        assertFalse(owner.getParkingLotStatus(parkingLot));
+    }
+
+    @Test
+    void TestOwnerNotifiableMultipleParkingLots() {
+        Owner owner = new Owner();
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.WHITE);
+
+        firstParkingLot.setNotifiable(owner);
+        secondParkingLot.setNotifiable(owner);
+        owner.assign(firstParkingLot);
+        owner.assign(secondParkingLot);
+        owner.park(firstCar);
+        owner.park(secondCar);
+
+        assertAll(
+                () -> assertTrue(owner.getParkingLotStatus(firstParkingLot)),
+                () -> assertTrue(owner.getParkingLotStatus(secondParkingLot))
+        );
     }
 }

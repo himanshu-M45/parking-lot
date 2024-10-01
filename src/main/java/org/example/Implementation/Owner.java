@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Owner extends Attendant {
+public class Owner extends Attendant implements Notifiable {
     private final Map<ParkingLot, Boolean> ownedParkingLots;
     private final String ownerId;
 
@@ -32,7 +32,6 @@ public class Owner extends Attendant {
     @Override
     public void assign(ParkingLot parkingLot) {
         if (ownedParkingLots.containsKey(parkingLot)) {
-            ownedParkingLots.put(parkingLot, true);
             super.assign(parkingLot);
             return;
         }
@@ -47,7 +46,12 @@ public class Owner extends Attendant {
         throw new OwnerDoesNotOwnParkingLotException("Owner does not own the parking lot");
     }
 
-    public boolean canOwnerAttendParkingLot(ParkingLot parkingLot) {
+    @Override
+    public void updateStatus(ParkingLot parkingLot) {
+        ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+    }
+
+    public boolean getParkingLotStatus(ParkingLot parkingLot) {
         return ownedParkingLots.get(parkingLot);
     }
 }
