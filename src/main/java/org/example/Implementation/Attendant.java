@@ -1,5 +1,7 @@
 package org.example.Implementation;
 
+import org.example.Entities.Car;
+import org.example.Entities.Ticket;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
 import org.example.Exceptions.ParkingLotIsFullException;

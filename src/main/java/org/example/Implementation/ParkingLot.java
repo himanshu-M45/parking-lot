@@ -1,7 +1,11 @@
 package org.example.Implementation;
 
+import org.example.Entities.Car;
+import org.example.Entities.Slot;
+import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
+import org.example.Interface.Notifiable;
 
 import java.util.ArrayList;
 import java.util.Objects;

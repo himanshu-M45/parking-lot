@@ -1,8 +1,10 @@
-package org.example.Implementation;
+package org.example.Entities;
 
 import org.example.Enum.CarColor;
 import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
+import org.example.Implementation.Attendant;
+import org.example.Implementation.ParkingLot;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

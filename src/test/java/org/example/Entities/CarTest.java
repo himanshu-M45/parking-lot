@@ -1,4 +1,4 @@
-package org.example.Implementation;
+package org.example.Entities;
 
 import org.example.Enum.CarColor;
 import org.junit.jupiter.api.Test;
