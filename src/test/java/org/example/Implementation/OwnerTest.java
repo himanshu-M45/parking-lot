@@ -86,7 +86,7 @@ class OwnerTest {
     void TestAssignSmartAttendantToOwnedParkingLot() {
         Owner owner = new Owner();
         ParkingLot parkingLot = owner.createParkingLot(1);
-        SmartAttendant smartAttendant = new SmartAttendant();
+        Attendant smartAttendant = new SmartAttendant();
 
         assertDoesNotThrow(() -> owner.assignAttendant(parkingLot, smartAttendant));
     }
@@ -249,14 +249,11 @@ class OwnerTest {
     @Test
     void TestOwnerNotifiableParkingLotIsFull() {
         Owner owner = new Owner();
-        ParkingLot parkingLot = owner.createParkingLot(1);
+        ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car(1, CarColor.BLACK);
 
-        assertFalse(owner.getParkingLotStatus(parkingLot));
-
         parkingLot.setNotifiable(owner);
-        owner.assign(parkingLot);
-        owner.park(car);
+        parkingLot.park(car);
 
         assertTrue(owner.getParkingLotStatus(parkingLot));
     }
@@ -264,12 +261,11 @@ class OwnerTest {
     @Test
     void TestOwnerNotifiableParkingLotIsNotFull() {
         Owner owner = new Owner();
-        ParkingLot parkingLot = owner.createParkingLot(2);
+        ParkingLot parkingLot = new ParkingLot(2);
         Car car = new Car(1, CarColor.BLACK);
 
         parkingLot.setNotifiable(owner);
-        owner.assign(parkingLot);
-        owner.park(car);
+        parkingLot.park(car);
 
         assertFalse(owner.getParkingLotStatus(parkingLot));
     }
@@ -277,17 +273,15 @@ class OwnerTest {
     @Test
     void TestOwnerNotifiableMultipleParkingLots() {
         Owner owner = new Owner();
-        ParkingLot firstParkingLot = owner.createParkingLot(1);
-        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.WHITE);
 
         firstParkingLot.setNotifiable(owner);
         secondParkingLot.setNotifiable(owner);
-        owner.assign(firstParkingLot);
-        owner.assign(secondParkingLot);
-        owner.park(firstCar);
-        owner.park(secondCar);
+        firstParkingLot.park(firstCar);
+        secondParkingLot.park(secondCar);
 
         assertAll(
                 () -> assertTrue(owner.getParkingLotStatus(firstParkingLot)),

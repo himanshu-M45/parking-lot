@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Owner extends Attendant implements Notifiable {
-    private final Map<ParkingLot, Boolean> ownedParkingLots;
+    protected Map<ParkingLot, Boolean> availableParkingLots;
     private final String ownerId;
 
     public Owner () {
-        this.ownedParkingLots = new HashMap<>();
+        this.availableParkingLots = new HashMap<>();
         this.ownerId = UUID.randomUUID().toString();
     }
 
@@ -27,12 +27,12 @@ public class Owner extends Attendant implements Notifiable {
             throw new ParkingLotAlreadyOwnedException("Parking lot is already owned by someone");
         }
         parkingLot.setOwner(ownerId);
-        ownedParkingLots.put(parkingLot, false);
+        availableParkingLots.put(parkingLot, false);
     }
 
     @Override
     public void assign(ParkingLot parkingLot) {
-        if (ownedParkingLots.containsKey(parkingLot)) {
+        if (availableParkingLots.containsKey(parkingLot)) {
             super.assign(parkingLot);
             return;
         }
@@ -49,10 +49,10 @@ public class Owner extends Attendant implements Notifiable {
 
     @Override
     public void updateStatus(ParkingLot parkingLot) {
-        ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+        availableParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
     }
 
     public boolean getParkingLotStatus(ParkingLot parkingLot) {
-        return ownedParkingLots.get(parkingLot);
+        return availableParkingLots.get(parkingLot);
     }
 }
