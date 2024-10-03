@@ -101,4 +101,8 @@ public class ParkingLot {
         this.notifiable = notifiable;
         this.notifiable.updateStatus(this);
     }
+
+    public int getAvailableSlots() {
+        return (int) slots.stream().filter(slot -> !slot.isOccupied()).count();
+    }
 }

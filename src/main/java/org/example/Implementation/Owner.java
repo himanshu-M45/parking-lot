@@ -11,12 +11,12 @@ public class Owner extends Attendant implements Notifiable {
     protected Map<ParkingLot, Boolean> availableParkingLots;
     private final String ownerId;
 
-    public Owner () {
+    public Owner() {
         this.availableParkingLots = new HashMap<>();
         this.ownerId = UUID.randomUUID().toString();
     }
 
-    public ParkingLot createParkingLot (int numberOfSlots) {
+    public ParkingLot createParkingLot(int numberOfSlots) {
         ParkingLot parkingLot = new ParkingLot(numberOfSlots);
         addParkingLot(parkingLot);
         return parkingLot;

@@ -4,19 +4,19 @@ import org.example.Entities.Car;
 import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.ParkingLotIsFullException;
+import org.example.Strategy.SmartNextLotStrategy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SmartAttendantTest
-{
+class SmartAttendantTest {
     // ------------------------------- distributed parking Tests -------------------------------
     @Test
     void TestDistributedParking() {
         ParkingLot firstParkingLot = new ParkingLot(2);
         ParkingLot secondParkingLot = new ParkingLot(2);
         ParkingLot thirdParkingLot = new ParkingLot(2);
-        Attendant smartAttendant = new SmartAttendant();
+        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
         Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
         Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
         Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
@@ -42,7 +42,7 @@ class SmartAttendantTest
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingLot thirdParkingLot = new ParkingLot(1);
-        Attendant smartAttendant = new SmartAttendant();
+        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
         Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
         Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
         Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
@@ -63,7 +63,7 @@ class SmartAttendantTest
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingLot thirdParkingLot = new ParkingLot(1);
-        Attendant smartAttendant = new SmartAttendant();
+        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
         Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
         Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
         Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot

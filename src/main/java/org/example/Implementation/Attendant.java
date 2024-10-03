@@ -4,15 +4,26 @@ import org.example.Entities.Car;
 import org.example.Entities.Ticket;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
-import org.example.Exceptions.ParkingLotIsFullException;
+import org.example.Interface.Attendable;
+import org.example.Strategy.BasicNextLotStrategy;
+import org.example.Strategy.NextLotStrategy;
 
 import java.util.ArrayList;
 
-public class Attendant {
+public class Attendant implements Attendable {
     // Attendant is responsible for managing parking lots
-    protected final ArrayList<ParkingLot> assignedParkingLots = new ArrayList<>();
+    private final ArrayList<ParkingLot> assignedParkingLots = new ArrayList<>();
+    private final NextLotStrategy nextLotStrategy;
 
-    public void assign (ParkingLot parkingLot) {
+    public Attendant() {
+        this.nextLotStrategy = new BasicNextLotStrategy();
+    }
+
+    public Attendant(NextLotStrategy strategy) {
+        this.nextLotStrategy = strategy;
+    }
+
+    public void assign(ParkingLot parkingLot) {
         // assign a parking lot to the attendant
         if (assignedParkingLots.contains(parkingLot)) {
             throw new ParkingLotAleradyAssignedException("Parking lot already assigned");
@@ -21,12 +32,8 @@ public class Attendant {
     }
 
     public Ticket park(Car car) {
-        for (ParkingLot parkingLot : assignedParkingLots) {
-            if (!parkingLot.isParkingLotFull()) {
-                return parkingLot.park(car);
-            }
-        }
-        throw new ParkingLotIsFullException("No available parking lot found");
+        ParkingLot parkingLot = nextLotStrategy.getNextLot(assignedParkingLots);
+        return parkingLot.park(car);
     }
 
     public Car unpark(Ticket carTicket) {
