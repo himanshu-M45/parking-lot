@@ -3,8 +3,8 @@ package org.example.Entities;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
-import org.example.Implementation.Attendant;
-import org.example.Implementation.Owner;
+import org.example.Role.Attendant;
+import org.example.Role.Owner;
 import org.example.Implementation.ParkingLot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +21,7 @@ class SlotTest {
         ParkingLot parkingLot = owner.createParkingLot(1);
         car = new Car(1, CarColor.BLACK);
         attendant = new Attendant();
-        owner.assignAttendant(parkingLot, attendant);
-        owner.assign(parkingLot);
+        owner.assign(parkingLot, attendant);
     }
 
     @Test

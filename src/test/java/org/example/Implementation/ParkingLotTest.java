@@ -4,6 +4,7 @@ import org.example.Entities.Car;
 import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
+import org.example.Role.Owner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,6 +42,13 @@ class ParkingLotTest {
     @Test
     void TestNewParkingLotIsEmpty() {
         assertFalse(parkingLot.isParkingLotFull());
+    }
+
+    @Test
+    void TestIsSameParkingLot() {
+        ParkingLot newParkingLot = spy(owner.createParkingLot(2));
+        assertFalse(newParkingLot.isSameParkingLot("j8hgf87gf"));
+        verify(newParkingLot, times(1)).isSameParkingLot(anyString());
     }
 
     // ------------------------------- park car Tests -------------------------------

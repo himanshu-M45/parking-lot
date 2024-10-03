@@ -10,8 +10,6 @@ import org.example.Interface.Notifiable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static java.lang.String.valueOf;
-
 public class ParkingLot {
     private boolean isFull = false;
     private final ArrayList<Slot> slots;
@@ -96,8 +94,9 @@ public class ParkingLot {
     public boolean identifyOwner(String owner) {
         return Objects.equals(this.owner, owner);
     }
-    public boolean isSameParkingLot(ParkingLot parkingLot) {
-        return Objects.equals(this.parkingLotId, parkingLot.parkingLotId);
+
+    public boolean isSameParkingLot(String parkingLotId) {
+        return Objects.equals(this.parkingLotId, parkingLotId);
     }
 
     public void setNotifiable(Notifiable notifiable) {

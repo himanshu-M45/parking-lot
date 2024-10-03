@@ -1,9 +1,10 @@
-package org.example.Implementation;
+package org.example.Role;
 
 import org.example.Entities.Car;
 import org.example.Entities.Ticket;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
+import org.example.Implementation.ParkingLot;
 import org.example.Interface.Attendable;
 import org.example.Strategy.BasicNextLotStrategy;
 import org.example.Strategy.NextLotStrategy;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class Attendant implements Attendable {
     // Attendant is responsible for managing parking lots
-    protected final ArrayList<ParkingLot> assignedParkingLots = new ArrayList<>();
+    private final ArrayList<ParkingLot> assignedParkingLots = new ArrayList<>();
     private final NextLotStrategy nextLotStrategy;
 
     public Attendant() {
@@ -23,7 +24,7 @@ public class Attendant implements Attendable {
         this.nextLotStrategy = strategy;
     }
 
-    public void assign(ParkingLot parkingLot) {
+    void assign(ParkingLot parkingLot) {
         // assign a parking lot to the attendant
         if (assignedParkingLots.contains(parkingLot)) {
             throw new ParkingLotAleradyAssignedException("Parking lot already assigned");

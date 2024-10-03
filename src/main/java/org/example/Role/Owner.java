@@ -1,6 +1,7 @@
-package org.example.Implementation;
+package org.example.Role;
 
 import org.example.Exceptions.*;
+import org.example.Implementation.ParkingLot;
 import org.example.Interface.Notifiable;
 
 import java.util.HashMap;
@@ -23,15 +24,7 @@ public class Owner extends Attendant implements Notifiable {
         return parkingLot;
     }
 
-    public void assign(ParkingLot parkingLot) {
-        if (ownedParkingLots.containsKey(parkingLot)) {
-            super.assign(parkingLot);
-            return;
-        }
-        throw new OwnerDoesNotOwnParkingLotException("Owner does not own the parking lot");
-    }
-
-    public void assignAttendant(ParkingLot parkingLot, Attendant attendant) {
+    public void assign(ParkingLot parkingLot, Attendant attendant) {
         if (parkingLot.identifyOwner(ownerId)) {
             attendant.assign(parkingLot);
             return;
@@ -41,12 +34,18 @@ public class Owner extends Attendant implements Notifiable {
 
     @Override
     public void updateAvailableStatus(String parkingLotId) {
-        ParkingLot targetParkingLot;
+        ParkingLot parkingLot = getParkingLotById(parkingLotId);
+        if (parkingLot != null) {
+            ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+        }
+    }
+    private ParkingLot getParkingLotById(String parkingLotId) {
         for (ParkingLot parkingLot : ownedParkingLots.keySet()) {
-            if (parkingLot.isSameParkingLot(parkingLot)) {
-                ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+            if (parkingLot.isSameParkingLot(parkingLotId)) {
+                return parkingLot;
             }
         }
+        return null; // or throw an exception if preferred
     }
 
     public boolean getParkingLotStatus(ParkingLot parkingLot) {

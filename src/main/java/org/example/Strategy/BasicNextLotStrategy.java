@@ -5,7 +5,7 @@ import org.example.Implementation.ParkingLot;
 
 import java.util.ArrayList;
 
-public class BasicNextLotStrategy extends NextLotStrategy{
+public class BasicNextLotStrategy extends NextLotStrategy {
     @Override
     public ParkingLot getNextLot(ArrayList<ParkingLot> parkingLots) {
         ParkingLot selectedLot = null;
