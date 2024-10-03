@@ -10,11 +10,14 @@ import org.example.Interface.Notifiable;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static java.lang.String.valueOf;
+
 public class ParkingLot {
     private boolean isFull = false;
     private final ArrayList<Slot> slots;
     private Notifiable notifiable;
     private final String owner;
+    private final String parkingLotId;
 
     public ParkingLot(int numberOfSlots, String owner) {
         if (numberOfSlots <= 0) {
@@ -24,6 +27,7 @@ public class ParkingLot {
             throw new CannotCreateParkingLotWithoutOwnerException("Owner should be provided");
         }
         this.owner = owner;
+        this.parkingLotId = String.valueOf(System.identityHashCode(this));
         this.slots = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
             slots.add(new Slot()); // Initialize all slots as empty
@@ -37,7 +41,7 @@ public class ParkingLot {
                 Ticket ticket = slot.park(car);
                 if (slots.stream().allMatch(Slot::isOccupied)) {
                     this.isFull = true;
-                    if (this.notifiable != null) notifiable.updateAvailableStatus(this);
+                    notifiable.updateAvailableStatus(parkingLotId);
                 }
                 return ticket;
             }
@@ -75,7 +79,7 @@ public class ParkingLot {
                 Car car = slot.unpark(carTicket);
                 if (this.isFull) {
                     this.isFull = false;
-                    if (this.notifiable != null) notifiable.updateAvailableStatus(this);
+                    notifiable.updateAvailableStatus(parkingLotId);
                 }
                 return car;
             } catch (InvalidTicketException e) {
@@ -92,10 +96,13 @@ public class ParkingLot {
     public boolean identifyOwner(String owner) {
         return Objects.equals(this.owner, owner);
     }
+    public boolean isSameParkingLot(ParkingLot parkingLot) {
+        return Objects.equals(this.parkingLotId, parkingLot.parkingLotId);
+    }
 
     public void setNotifiable(Notifiable notifiable) {
         this.notifiable = notifiable;
-        this.notifiable.updateAvailableStatus(this);
+        this.notifiable.updateAvailableStatus(parkingLotId);
     }
 
     public int getAvailableSlots() {

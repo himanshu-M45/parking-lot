@@ -40,8 +40,13 @@ public class Owner extends Attendant implements Notifiable {
     }
 
     @Override
-    public void updateAvailableStatus(ParkingLot parkingLot) {
-        ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+    public void updateAvailableStatus(String parkingLotId) {
+        ParkingLot targetParkingLot;
+        for (ParkingLot parkingLot : ownedParkingLots.keySet()) {
+            if (parkingLot.isSameParkingLot(parkingLot)) {
+                ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+            }
+        }
     }
 
     public boolean getParkingLotStatus(ParkingLot parkingLot) {
