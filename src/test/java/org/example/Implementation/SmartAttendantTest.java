@@ -5,26 +5,35 @@ import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.ParkingLotIsFullException;
 import org.example.Strategy.SmartNextLotStrategy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SmartAttendantTest {
+    private Owner owner;
+    private Attendant smartAttendant;
+
+    @BeforeEach
+    void setUp() {
+        owner = new Owner();
+        smartAttendant = new Attendant(new SmartNextLotStrategy());
+    }
+
     // ------------------------------- distributed parking Tests -------------------------------
     @Test
     void TestDistributedParking() {
-        ParkingLot firstParkingLot = new ParkingLot(2);
-        ParkingLot secondParkingLot = new ParkingLot(2);
-        ParkingLot thirdParkingLot = new ParkingLot(2);
-        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
-        Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
-        Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
-        Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
-        Car fourthCar = new Car(4, CarColor.BLUE); // firstParkingLot
+        ParkingLot firstParkingLot = owner.createParkingLot(2);
+        ParkingLot secondParkingLot = owner.createParkingLot(2);
+        ParkingLot thirdParkingLot = owner.createParkingLot(2);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+        Car thirdCar = new Car(3, CarColor.WHITE);
+        Car fourthCar = new Car(4, CarColor.BLUE);
 
-        smartAttendant.assign(firstParkingLot);
-        smartAttendant.assign(secondParkingLot);
-        smartAttendant.assign(thirdParkingLot);
+        owner.assignAttendant(firstParkingLot, smartAttendant);
+        owner.assignAttendant(secondParkingLot, smartAttendant);
+        owner.assignAttendant(thirdParkingLot, smartAttendant);
         smartAttendant.park(firstCar);
         smartAttendant.park(secondCar);
         smartAttendant.park(thirdCar);
@@ -39,18 +48,17 @@ class SmartAttendantTest {
 
     @Test
     void TestDistributedParkingWhenAllParkingLotsAreFull() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
-        ParkingLot thirdParkingLot = new ParkingLot(1);
-        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
-        Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
-        Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
-        Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
-        Car fourthCar = new Car(4, CarColor.BLUE); // firstParkingLot
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        ParkingLot thirdParkingLot = owner.createParkingLot(1);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+        Car thirdCar = new Car(3, CarColor.WHITE);
+        Car fourthCar = new Car(4, CarColor.BLUE);
 
-        smartAttendant.assign(firstParkingLot);
-        smartAttendant.assign(secondParkingLot);
-        smartAttendant.assign(thirdParkingLot);
+        owner.assignAttendant(firstParkingLot, smartAttendant);
+        owner.assignAttendant(secondParkingLot, smartAttendant);
+        owner.assignAttendant(thirdParkingLot, smartAttendant);
         smartAttendant.park(firstCar);
         smartAttendant.park(secondCar);
         smartAttendant.park(thirdCar);
@@ -60,18 +68,17 @@ class SmartAttendantTest {
 
     @Test
     void TestDistributedParkingWhenAllParkingLotsAreFullAndUnparkCarAndParkAgainInSameParkingLot() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
-        ParkingLot thirdParkingLot = new ParkingLot(1);
-        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
-        Car firstCar = new Car(1, CarColor.BLACK); // firstParkingLot
-        Car secondCar = new Car(2, CarColor.RED); // secondParkingLot
-        Car thirdCar = new Car(3, CarColor.WHITE); // thirdParkingLot
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        ParkingLot thirdParkingLot = owner.createParkingLot(1);
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+        Car thirdCar = new Car(3, CarColor.WHITE);
         Car fourthCar = new Car(4, CarColor.BLUE);
 
-        smartAttendant.assign(firstParkingLot);
-        smartAttendant.assign(secondParkingLot);
-        smartAttendant.assign(thirdParkingLot);
+        owner.assignAttendant(firstParkingLot, smartAttendant);
+        owner.assignAttendant(secondParkingLot, smartAttendant);
+        owner.assignAttendant(thirdParkingLot, smartAttendant);
         smartAttendant.park(firstCar);
         Ticket secondCarTicket = smartAttendant.park(secondCar);
         smartAttendant.park(thirdCar);

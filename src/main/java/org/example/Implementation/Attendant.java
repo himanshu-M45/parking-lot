@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Attendant implements Attendable {
     // Attendant is responsible for managing parking lots
-    private final ArrayList<ParkingLot> assignedParkingLots = new ArrayList<>();
+    protected final ArrayList<ParkingLot> assignedParkingLots = new ArrayList<>();
     private final NextLotStrategy nextLotStrategy;
 
     public Attendant() {

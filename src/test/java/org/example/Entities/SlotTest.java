@@ -4,12 +4,27 @@ import org.example.Enum.CarColor;
 import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Implementation.Attendant;
+import org.example.Implementation.Owner;
 import org.example.Implementation.ParkingLot;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SlotTest {
+    private Car car;
+    private Attendant attendant;
+
+    @BeforeEach
+    void setUp() {
+        Owner owner = new Owner();
+        ParkingLot parkingLot = owner.createParkingLot(1);
+        car = new Car(1, CarColor.BLACK);
+        attendant = new Attendant();
+        owner.assignAttendant(parkingLot, attendant);
+        owner.assign(parkingLot);
+    }
+
     @Test
     void TestSlotInitialization() {
         Slot slot = new Slot();
@@ -40,11 +55,6 @@ class SlotTest {
 
     @Test
     void TestUnparkAlreadyUnparkedCar() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-        Car car = new Car(1, CarColor.BLACK);
-
-        attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
         attendant.unpark(carTicket);
 

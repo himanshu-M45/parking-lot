@@ -7,93 +7,79 @@ import org.example.Exceptions.CarAlreadyParkedException;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Exceptions.ParkingLotAleradyAssignedException;
 import org.example.Exceptions.ParkingLotIsFullException;
+import org.example.Strategy.SmartNextLotStrategy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class AttendantTest {
+    private Owner owner;
+    private ParkingLot parkingLot;
+    private Car car;
+    private Attendant attendant;
+
+    @BeforeEach
+    void setUp() {
+        owner = new Owner();
+        parkingLot = owner.createParkingLot(2);
+        car = new Car(1, CarColor.BLACK);
+        attendant = new Attendant();
+        owner.assignAttendant(parkingLot, attendant);
+        owner.assign(parkingLot);
+    }
+    
     // ------------------------------- attendant Tests -------------------------------
     @Test
     void TestAssignParkingLotToAttendant() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-
-        assertDoesNotThrow(() -> attendant.assign(parkingLot));
+        Attendant anotherAttendant = new Attendant();
+        assertDoesNotThrow(() -> owner.assignAttendant(parkingLot, anotherAttendant));
     }
 
     @Test
     void TestAssignTwoParkingLotToAttendant() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        ParkingLot anotherParkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-
-        attendant.assign(parkingLot);
-
-        assertDoesNotThrow(() -> attendant.assign(anotherParkingLot));
+        ParkingLot anotherParkingLot = owner.createParkingLot(1);
+        assertDoesNotThrow(() -> owner.assign(anotherParkingLot));
     }
 
     @Test
     void TestCannotAssignSameParkingLotTwice() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-
-        attendant.assign(parkingLot);
-
         assertThrows(ParkingLotAleradyAssignedException.class, () -> attendant.assign(parkingLot));
     }
 
     @Test
     void TestAssignSameParkingLotToMultipleAttendants() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        Attendant firstAttendant = new Attendant();
-        Attendant secondAttendant = new Attendant();
-
-        firstAttendant.assign(parkingLot);
-
-        assertDoesNotThrow(() -> secondAttendant.assign(parkingLot));
+        Attendant anotherParkingLot = new Attendant();
+        assertDoesNotThrow(() -> owner.assignAttendant(parkingLot, anotherParkingLot));
     }
 
     // ------------------------------- park through attendant Tests -------------------------------
     @Test
     void TestParkingCarThroughAttendant() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-        Car car = new Car(1, CarColor.BLACK);
-
-        attendant.assign(parkingLot);
         Ticket carTicket = attendant.park(car);
-
         assertTrue(carTicket.validateTicket(carTicket));
     }
 
     @Test
     void TestTryToParkCarWhenParkingLotIsFull() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        Attendant attendant = new Attendant();
-        Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
+        Car thirdCar = new Car(3, CarColor.BLACK);
+        attendant.park(car);
+        attendant.park(secondCar);
 
-        attendant.assign(parkingLot);
-        attendant.park(firstCar);
-
-        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(secondCar));
+        assertThrows(ParkingLotIsFullException.class, () -> attendant.park(thirdCar));
     }
 
     @Test
     void TestParkSameCarTwice() {
-        ParkingLot parkingLot = new ParkingLot(2);
-        Attendant attendant = new Attendant();
-        Car car = new Car(1, CarColor.BLACK);
-
-        attendant.assign(parkingLot);
         attendant.park(car);
-
         assertThrows(CarAlreadyParkedException.class, () -> attendant.park(car));
     }
 
     @Test
     void TestParkMultipleCarsInParkingLotThroughAttendant() {
-        ParkingLot parkingLot = new ParkingLot(2);
+        ParkingLot parkingLot = owner.createParkingLot(2);
         Attendant attendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
@@ -106,8 +92,8 @@ class AttendantTest {
 
     @Test
     void TestParkCarInMultipleParkingLotsThroughSameAttendant() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
         Attendant attendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
@@ -123,8 +109,8 @@ class AttendantTest {
 
     @Test
     void TestParkSameCarInDifferentParkingLotsOfSameAttendant() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -137,10 +123,10 @@ class AttendantTest {
 
     @Test
     void TestParkCarInDifferentParkingLotThroughDifferentAttendants() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
         Attendant firstAttendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
-        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
         Attendant secondAttendant = new Attendant();
         Car secondCar = new Car(2, CarColor.RED);
 
@@ -155,7 +141,7 @@ class AttendantTest {
 
     @Test
     void TestParkCarInSameParkingLotThroughDifferentAttendants() {
-        ParkingLot parkingLot = new ParkingLot(2);
+        ParkingLot parkingLot = owner.createParkingLot(2);
         Attendant firstAttendant = new Attendant();
         Attendant secondAttendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
@@ -173,7 +159,7 @@ class AttendantTest {
     // ------------------------------- unpark through attendant Tests -------------------------------
     @Test
     void TestUnparkCarThroughAttendant() {
-        ParkingLot parkingLot = new ParkingLot(1);
+        ParkingLot parkingLot = owner.createParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -185,8 +171,8 @@ class AttendantTest {
 
     @Test
     void TestUnparkCarFromMultipleParkingLots() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
         Attendant attendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
@@ -202,7 +188,7 @@ class AttendantTest {
 
     @Test
     void TestUnparkAlreadyUnparkedCar() {
-        ParkingLot parkingLot = new ParkingLot(1);
+        ParkingLot parkingLot = owner.createParkingLot(1);
         Attendant attendant = new Attendant();
         Car car = new Car(1, CarColor.BLACK);
 
@@ -215,8 +201,8 @@ class AttendantTest {
 
     @Test
     void TestUnparkMultipleCarsFromMultipleParkingLotsOfSameAttendant() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
         Attendant attendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
         Car secondCar = new Car(2, CarColor.RED);
@@ -232,8 +218,8 @@ class AttendantTest {
 
     @Test
     void TestUnparkMultipleCarsFromMultipleParkingLotsOfDifferentAttendant() {
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
         Attendant firstAttendant = new Attendant();
         Attendant secondAttendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
@@ -250,7 +236,7 @@ class AttendantTest {
 
     @Test
     void TestUnparkCarsFromSameParkingLotThroughDifferentAttendants() {
-        ParkingLot parkingLot = new ParkingLot(2);
+        ParkingLot parkingLot = owner.createParkingLot(2);
         Attendant firstAttendant = new Attendant();
         Attendant secondAttendant = new Attendant();
         Car firstCar = new Car(1, CarColor.BLACK);
@@ -263,5 +249,41 @@ class AttendantTest {
 
         assertEquals(firstCar, firstAttendant.unpark(firstCarTicket));
         assertEquals(secondCar, secondAttendant.unpark(secondCarTicket));
+    }
+
+    @Test
+    void TestParkThroughBasicAndSmartAttendants() {
+        ParkingLot parkingLot = spy(owner.createParkingLot(2));
+        ParkingLot anotherParkingLot = spy(owner.createParkingLot(2));
+        Attendant smartAttendant = new Attendant(new SmartNextLotStrategy());
+
+        attendant.assign(parkingLot);
+        smartAttendant.assign(anotherParkingLot);
+
+        Car firstCar = new Car(1, CarColor.BLACK);
+        Car secondCar = new Car(2, CarColor.RED);
+        Car thirdCar = new Car(3, CarColor.BLACK);
+        Car fourthCar = new Car(4, CarColor.RED);
+
+        Ticket firstCarTicket = attendant.park(firstCar);
+        verify(parkingLot, times(1)).park(firstCar);
+        verify(anotherParkingLot, times(0)).park(firstCar);
+
+        Ticket secondCarTicket = smartAttendant.park(secondCar);
+        verify(parkingLot, times(0)).park(secondCar);
+        verify(anotherParkingLot, times(1)).park(secondCar);
+
+        Ticket thirdCarTicket = attendant.park(thirdCar);
+        verify(parkingLot, times(1)).park(thirdCar);
+        verify(anotherParkingLot, times(0)).park(thirdCar);
+
+        Ticket fourthCarTicket = smartAttendant.park(fourthCar);
+        verify(parkingLot, times(0)).park(fourthCar);
+        verify(anotherParkingLot, times(1)).park(fourthCar);
+
+        assertTrue(firstCarTicket.validateTicket(firstCarTicket));
+        assertTrue(secondCarTicket.validateTicket(secondCarTicket));
+        assertTrue(thirdCarTicket.validateTicket(thirdCarTicket));
+        assertTrue(fourthCarTicket.validateTicket(fourthCarTicket));
     }
 }

@@ -8,31 +8,23 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Owner extends Attendant implements Notifiable {
-    protected Map<ParkingLot, Boolean> availableParkingLots;
+    protected Map<ParkingLot, Boolean> ownedParkingLots;
     private final String ownerId;
 
     public Owner() {
-        this.availableParkingLots = new HashMap<>();
+        this.ownedParkingLots = new HashMap<>();
         this.ownerId = UUID.randomUUID().toString();
     }
 
     public ParkingLot createParkingLot(int numberOfSlots) {
-        ParkingLot parkingLot = new ParkingLot(numberOfSlots);
-        addParkingLot(parkingLot);
+        ParkingLot parkingLot = new ParkingLot(numberOfSlots, this.ownerId);
+        ownedParkingLots.put(parkingLot, false);
+        parkingLot.setNotifiable(this);
         return parkingLot;
     }
 
-    public void addParkingLot(ParkingLot parkingLot) {
-        if (parkingLot.isOwned()) {
-            throw new ParkingLotAlreadyOwnedException("Parking lot is already owned by someone");
-        }
-        parkingLot.setOwner(ownerId);
-        availableParkingLots.put(parkingLot, false);
-    }
-
-    @Override
     public void assign(ParkingLot parkingLot) {
-        if (availableParkingLots.containsKey(parkingLot)) {
+        if (ownedParkingLots.containsKey(parkingLot)) {
             super.assign(parkingLot);
             return;
         }
@@ -40,7 +32,7 @@ public class Owner extends Attendant implements Notifiable {
     }
 
     public void assignAttendant(ParkingLot parkingLot, Attendant attendant) {
-        if (parkingLot.identifyOwner(ownerId) && parkingLot.isOwned()) {
+        if (parkingLot.identifyOwner(ownerId)) {
             attendant.assign(parkingLot);
             return;
         }
@@ -48,11 +40,11 @@ public class Owner extends Attendant implements Notifiable {
     }
 
     @Override
-    public void updateStatus(ParkingLot parkingLot) {
-        availableParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+    public void updateAvailableStatus(ParkingLot parkingLot) {
+        ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
     }
 
     public boolean getParkingLotStatus(ParkingLot parkingLot) {
-        return availableParkingLots.get(parkingLot);
+        return ownedParkingLots.get(parkingLot);
     }
 }

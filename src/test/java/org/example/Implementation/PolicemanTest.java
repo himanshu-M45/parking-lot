@@ -2,51 +2,56 @@ package org.example.Implementation;
 
 import org.example.Entities.Car;
 import org.example.Enum.CarColor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PolicemanTest {
+    private Owner owner;
+    private ParkingLot parkingLot;
+    private Car car;
+    private Policeman policeman;
+
+    @BeforeEach
+    void setUp() {
+        owner = new Owner();
+        parkingLot = owner.createParkingLot(2);
+        car = new Car(1, CarColor.BLACK);
+        owner.assign(parkingLot);
+        policeman = new Policeman();
+        parkingLot.setNotifiable(policeman);
+    }
+    
     @Test
     void TestPolicemanInitialization() {
-        Policeman policeman = new Policeman();
         assertNotNull(policeman);
     }
 
     @Test
     void TestPolicemanUpdatesStatusWhenParkingLotIsFull() {
-        Policeman policeman = new Policeman();
-        ParkingLot parkingLot = new ParkingLot(1);
-        parkingLot.setNotifiable(policeman);
-        Car car = new Car(1, CarColor.BLACK);
-
+        Car newCar = new Car(2, CarColor.BLUE);
         parkingLot.park(car);
+        parkingLot.park(newCar);
 
         assertTrue(policeman.getParkingLotStatus(parkingLot));
     }
 
     @Test
     void TestAddParkingLotToPolicemanWithInitialStatus() {
-        Policeman policeman = new Policeman();
-        ParkingLot parkingLot = new ParkingLot(1);
-        parkingLot.setNotifiable(policeman);
         assertFalse(policeman.getParkingLotStatus(parkingLot));
     }
 
     @Test
     void Test(){
-        Policeman policeman = new Policeman();
-        ParkingLot parkingLot = new ParkingLot(1);
-        parkingLot.setNotifiable(policeman);
         assertFalse(policeman.getParkingLotStatus(parkingLot));
     }
 
     @Test
     void TestAddMultipleParkingLotsToPoliceman() {
-        Policeman policeman = new Policeman();
-        ParkingLot firstParkingLot = new ParkingLot(1);
-        ParkingLot secondParkingLot = new ParkingLot(1);
-        ParkingLot thirdParkingLot = new ParkingLot(1);
+        ParkingLot firstParkingLot = owner.createParkingLot(1);
+        ParkingLot secondParkingLot = owner.createParkingLot(1);
+        ParkingLot thirdParkingLot = owner.createParkingLot(1);
         firstParkingLot.setNotifiable(policeman);
         secondParkingLot.setNotifiable(policeman);
         thirdParkingLot.setNotifiable(policeman);
@@ -60,23 +65,15 @@ class PolicemanTest {
 
     @Test
     void TestParkingLotIsFullThroughPoliceMan() {
-        Policeman policeman = new Policeman();
-        ParkingLot parkingLot = new ParkingLot(1);
-        parkingLot.setNotifiable(policeman);
-        Car car = new Car(1, CarColor.BLACK);
-
+        Car newCar = new Car(2, CarColor.BLUE);
         parkingLot.park(car);
+        parkingLot.park(newCar);
 
         assertTrue(policeman.getParkingLotStatus(parkingLot));
     }
 
     @Test
     void TestParkingLotIsNotFullThroughPoliceMan() {
-        Policeman policeman = new Policeman();
-        ParkingLot parkingLot = new ParkingLot(2);
-        parkingLot.setNotifiable(policeman);
-        Car car = new Car(1, CarColor.BLACK);
-
         parkingLot.park(car);
 
         assertFalse(policeman.getParkingLotStatus(parkingLot));
