@@ -1,7 +1,7 @@
 package org.example.Role;
 
 import org.example.Exceptions.*;
-import org.example.Implementation.ParkingLot;
+import org.example.Entities.ParkingLot;
 import org.example.Interface.Notifiable;
 
 import java.util.HashMap;
@@ -33,22 +33,23 @@ public class Owner extends Attendant implements Notifiable {
     }
 
     @Override
-    public void updateAvailableStatus(String parkingLotId) {
+    public void updateAvailableStatus(String parkingLotId, boolean status) {
         ParkingLot parkingLot = getParkingLotById(parkingLotId);
         if (parkingLot != null) {
-            ownedParkingLots.put(parkingLot, parkingLot.isParkingLotFull());
+            ownedParkingLots.put(parkingLot, status);
         }
     }
+
     private ParkingLot getParkingLotById(String parkingLotId) {
         for (ParkingLot parkingLot : ownedParkingLots.keySet()) {
             if (parkingLot.isSameParkingLot(parkingLotId)) {
                 return parkingLot;
             }
         }
-        return null; // or throw an exception if preferred
+        return null;
     }
 
-    public boolean getParkingLotStatus(ParkingLot parkingLot) {
-        return ownedParkingLots.get(parkingLot);
+    public void setPolicemanObserver(Policeman policeman, ParkingLot parkingLot) {
+        parkingLot.setNotifiable(policeman);
     }
 }

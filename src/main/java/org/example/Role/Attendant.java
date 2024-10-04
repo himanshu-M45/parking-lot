@@ -3,8 +3,8 @@ package org.example.Role;
 import org.example.Entities.Car;
 import org.example.Entities.Ticket;
 import org.example.Exceptions.InvalidTicketException;
-import org.example.Exceptions.ParkingLotAleradyAssignedException;
-import org.example.Implementation.ParkingLot;
+import org.example.Exceptions.ParkingLotAlreadyAssignedException;
+import org.example.Entities.ParkingLot;
 import org.example.Interface.Attendable;
 import org.example.Strategy.BasicNextLotStrategy;
 import org.example.Strategy.NextLotStrategy;
@@ -27,7 +27,7 @@ public class Attendant implements Attendable {
     void assign(ParkingLot parkingLot) {
         // assign a parking lot to the attendant
         if (assignedParkingLots.contains(parkingLot)) {
-            throw new ParkingLotAleradyAssignedException("Parking lot already assigned");
+            throw new ParkingLotAlreadyAssignedException("Parking lot already assigned");
         }
         assignedParkingLots.add(parkingLot);
     }

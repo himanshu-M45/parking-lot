@@ -1,11 +1,10 @@
-package org.example.Implementation;
+package org.example.Role;
 
 import org.example.Entities.Car;
 import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
-import org.example.Role.Attendant;
-import org.example.Role.Owner;
+import org.example.Entities.ParkingLot;
 import org.example.Strategy.SmartNextLotStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -202,7 +201,7 @@ class OwnerTest {
 
         newParkingLot.park(car);
         newParkingLot.park(newCar);
-        verify(newOwner, times(2)).updateAvailableStatus(any());
+        verify(newOwner, times(2)).updateAvailableStatus(any(), anyBoolean());
     }
 
     @Test
@@ -211,6 +210,6 @@ class OwnerTest {
         ParkingLot newParkingLot = newOwner.createParkingLot(1);
 
         newParkingLot.park(car);
-        verify(newOwner, times(2)).updateAvailableStatus(any());
+        verify(newOwner, times(2)).updateAvailableStatus(any(), anyBoolean());
     }
 }

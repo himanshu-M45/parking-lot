@@ -1,7 +1,5 @@
-package org.example.Implementation;
+package org.example.Entities;
 
-import org.example.Entities.Car;
-import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
 import org.example.Role.Owner;
@@ -23,12 +21,13 @@ class ParkingLotTest {
         parkingLot = owner.createParkingLot(4);
         car = new Car(1, CarColor.RED);
     }
-    
+
     // ------------------------------- parking lot Tests -------------------------------
     @Test
     void TestCreatingParkingLotWithoutOwner() {
         assertThrows(CannotCreateParkingLotWithoutOwnerException.class, () -> new ParkingLot(1, null));
     }
+
     @Test
     void TestParkingLotWithZeroSlotsThrowsException() {
         assertThrows(InvalidValueException.class, () -> owner.createParkingLot(0));

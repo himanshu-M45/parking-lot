@@ -5,7 +5,6 @@ import org.example.Exceptions.CarNotParkedException;
 import org.example.Exceptions.InvalidTicketException;
 import org.example.Role.Attendant;
 import org.example.Role.Owner;
-import org.example.Implementation.ParkingLot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

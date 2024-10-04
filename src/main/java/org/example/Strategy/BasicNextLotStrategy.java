@@ -1,7 +1,7 @@
 package org.example.Strategy;
 
 import org.example.Exceptions.ParkingLotIsFullException;
-import org.example.Implementation.ParkingLot;
+import org.example.Entities.ParkingLot;
 
 import java.util.ArrayList;
 

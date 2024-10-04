@@ -1,8 +1,5 @@
-package org.example.Implementation;
+package org.example.Entities;
 
-import org.example.Entities.Car;
-import org.example.Entities.Slot;
-import org.example.Entities.Ticket;
 import org.example.Enum.CarColor;
 import org.example.Exceptions.*;
 import org.example.Interface.Notifiable;
@@ -39,7 +36,7 @@ public class ParkingLot {
                 Ticket ticket = slot.park(car);
                 if (slots.stream().allMatch(Slot::isOccupied)) {
                     this.isFull = true;
-                    notifiable.updateAvailableStatus(parkingLotId);
+                    notifiable.updateAvailableStatus(parkingLotId, true);
                 }
                 return ticket;
             }
@@ -77,7 +74,7 @@ public class ParkingLot {
                 Car car = slot.unpark(carTicket);
                 if (this.isFull) {
                     this.isFull = false;
-                    notifiable.updateAvailableStatus(parkingLotId);
+                    notifiable.updateAvailableStatus(parkingLotId, false);
                 }
                 return car;
             } catch (InvalidTicketException e) {
@@ -101,7 +98,7 @@ public class ParkingLot {
 
     public void setNotifiable(Notifiable notifiable) {
         this.notifiable = notifiable;
-        this.notifiable.updateAvailableStatus(parkingLotId);
+        this.notifiable.updateAvailableStatus(parkingLotId, isFull);
     }
 
     public int getAvailableSlots() {

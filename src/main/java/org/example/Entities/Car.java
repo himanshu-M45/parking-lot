@@ -20,7 +20,7 @@ public class Car {
         return this.registrationNumber == registrationNumber;
     }
 
-    public boolean isIdenticalColor (CarColor color) {
+    public boolean isIdenticalColor(CarColor color) {
         return this.color == color;
     }
 

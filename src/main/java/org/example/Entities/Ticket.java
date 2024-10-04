@@ -10,7 +10,7 @@ public class Ticket {
         this.ticketId = UUID.randomUUID().toString();
     }
 
-    public boolean validateTicket (Ticket ticket) {
+    public boolean validateTicket(Ticket ticket) {
         return Objects.equals(this.ticketId, ticket.ticketId);
     }
 }
